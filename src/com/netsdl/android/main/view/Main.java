@@ -31,6 +31,7 @@ import com.netsdl.android.common.Structs.Item;
 import com.netsdl.android.common.db.PaymentMaster;
 import com.netsdl.android.common.db.PosTable;
 import com.netsdl.android.common.db.SkuMaster;
+import com.netsdl.android.main.R;
 import com.netsdl.android.main.view.list.ItemList;
 import com.netsdl.android.main.view.list.PayList;
 

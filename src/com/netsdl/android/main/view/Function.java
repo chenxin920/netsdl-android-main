@@ -1,8 +1,6 @@
 package com.netsdl.android.main.view;
 
-import com.netsdl.android.main.view.Type.DocumentType;
-import com.netsdl.android.main.view.Type.InnerType;
-import com.netsdl.android.main.view.Type.RtnType;
+import com.netsdl.android.main.R;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;

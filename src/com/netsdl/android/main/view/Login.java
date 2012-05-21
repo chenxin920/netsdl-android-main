@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.netsdl.android.common.Util;
 import com.netsdl.android.common.db.StoreMaster;
+import com.netsdl.android.main.R;
 
 public class Login {
 	public static final int LAYOUT_COMMON33 = R.layout.common33;
