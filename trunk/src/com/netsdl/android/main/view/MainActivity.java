@@ -40,8 +40,6 @@ public class MainActivity extends Activity {
 
 	public PosTable posTable = null;
 
-	public Init init = null;
-
 	public Login login = null;
 
 	public Function function = null;
@@ -70,13 +68,12 @@ public class MainActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		init = new Init(this);
 		login = new Login(this);
 		function = new Function(this);
 		type = new Type(this);
 		main = new Main(this);
 
-		init.init();
+		login.init();
 		
 	}
 

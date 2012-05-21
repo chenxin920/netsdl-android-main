@@ -1,5 +1,7 @@
 package com.netsdl.android.main.view;
 
+import com.netsdl.android.main.R;
+
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;

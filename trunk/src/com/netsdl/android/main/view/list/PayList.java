@@ -1,6 +1,8 @@
 package com.netsdl.android.main.view.list;
 
 import com.netsdl.android.common.db.PaymentMaster;
+import com.netsdl.android.common.view.list.Currentable;
+import com.netsdl.android.main.R;
 import com.netsdl.android.main.view.Main;
 import com.netsdl.android.main.view.MainActivity;
 

@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.netsdl.android.common.Structs.Item;
+import com.netsdl.android.main.R;
 import com.netsdl.android.main.view.MainActivity;
 import com.netsdl.android.common.view.dialog.Dialogable;
 

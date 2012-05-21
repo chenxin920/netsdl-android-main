@@ -21,6 +21,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.netsdl.android.common.db.SkuMaster;
+import com.netsdl.android.common.view.list.Currentable;
+import com.netsdl.android.main.R;
 import com.netsdl.android.main.view.Main;
 import com.netsdl.android.main.view.MainActivity;
 

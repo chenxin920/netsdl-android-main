@@ -1,5 +1,8 @@
 package com.netsdl.android.main.view.list;
 
+import com.netsdl.android.common.view.list.Currentable;
+import com.netsdl.android.main.R;
+
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.GestureDetector.SimpleOnGestureListener;
