@@ -1,6 +1,10 @@
 package com.netsdl.android.main.view;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.net.Uri;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -39,7 +43,6 @@ public class Login {
 		params.weight = 3;
 		row1.setLayoutParams(params);
 
-		
 		LinearLayout row2 = (LinearLayout) view.findViewById(R.id.row2);
 		params = (android.widget.LinearLayout.LayoutParams) row2
 				.getLayoutParams();
@@ -51,14 +54,13 @@ public class Login {
 				.getLayoutParams();
 		params.weight = 1;
 		row3.setLayoutParams(params);
-		
+
 		LinearLayout column1 = (LinearLayout) view.findViewById(R.id.column1);
 		params = (android.widget.LinearLayout.LayoutParams) column1
 				.getLayoutParams();
 		params.weight = 3;
 		column1.setLayoutParams(params);
 
-		
 		LinearLayout column2 = (LinearLayout) view.findViewById(R.id.column2);
 		column2.getLayoutParams();
 		params = (android.widget.LinearLayout.LayoutParams) column2
@@ -71,7 +73,7 @@ public class Login {
 				.getLayoutParams();
 		params.weight = 3;
 		column3.setLayoutParams(params);
-		
+
 		coreLayout = (FrameLayout) view.findViewById(R.id.core);
 	}
 
@@ -139,8 +141,18 @@ public class Login {
 					try {
 						int iTemp = Integer.parseInt(editText.getText()
 								.toString());
+						ContentResolver contentResolver = parent
+								.getContentResolver();
+						Cursor cursor = contentResolver.query(
+								Uri.parse("content://com.netsdl.android.init.provider.Provider"),
+								null, null, null, null);
+						
+						Log.d("cursor",
+								cursor == null ? "null" : cursor.toString());
+
 						storeObjs = parent.storeMaster
 								.getSingleColumn(new Object[] { iTemp });
+
 						if (storeObjs == null) {
 
 							Toast.makeText(parent, R.string.msg_no_id,
@@ -177,14 +189,14 @@ public class Login {
 
 				} else {
 					if (editText.getText().toString().length() > 0) {
-						String str1 = Util.getMD5(editText.getText()
-								.toString());
+						String str1 = Util
+								.getMD5(editText.getText().toString());
 						String str2 = (String) parent.storeMaster
 								.getColumnValue(storeObjs,
 										StoreMaster.COLUMN_MD5);
 						if (str1.equals(str2)) {
 							// parent.main.init();
-							//parent.type.init();
+							// parent.type.init();
 							parent.function.init();
 						} else {
 							Toast.makeText(parent, R.string.msg_password_wrong,
