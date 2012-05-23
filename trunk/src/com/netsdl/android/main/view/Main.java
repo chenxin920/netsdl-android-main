@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.netsdl.android.common.Structs;
 import com.netsdl.android.common.Util;
 import com.netsdl.android.common.Structs.Item;
+import com.netsdl.android.common.db.DatabaseHelper;
 import com.netsdl.android.common.db.PaymentMaster;
 import com.netsdl.android.common.db.PosTable;
 import com.netsdl.android.common.db.SkuMaster;
@@ -243,8 +244,9 @@ public class Main {
 					new Object[] { str },
 					new String[] { SkuMaster.COLUMN_BAR_CODE });
 			if (objs != null) {
-				Integer skuId = (Integer) parent.skuMaster.getColumnValue(objs,
-						SkuMaster.COLUMN_SKU_ID);
+
+				Integer skuId = (Integer) DatabaseHelper.getColumnValue(objs,
+						SkuMaster.COLUMN_SKU_ID, SkuMaster.COLUMNS);
 
 				if (!parent.mapSkuMaster.containsKey(skuId)) {
 					parent.mapSkuMaster.put(skuId, objs);
@@ -252,8 +254,10 @@ public class Main {
 				if (!parent.mapItem.containsKey(skuId)) {
 					Item item = new Structs().new Item();
 					item.count = 1;
-					item.price = (BigDecimal) parent.skuMaster.getColumnValue(
-							objs, SkuMaster.COLUMN_ITEM_STD_PRICE);
+
+					item.price = (BigDecimal) DatabaseHelper.getColumnValue(
+							objs, SkuMaster.COLUMN_ITEM_STD_PRICE,
+							SkuMaster.COLUMNS);
 					item.price.multiply(new BigDecimal(item.count));
 					item.lumpSum = item.price.multiply(new BigDecimal(
 							item.count));
@@ -261,8 +265,10 @@ public class Main {
 				} else {
 					Item item = parent.mapItem.get(skuId);
 					item.count += 1;
-					item.price = (BigDecimal) parent.skuMaster.getColumnValue(
-							objs, SkuMaster.COLUMN_ITEM_STD_PRICE);
+
+					item.price = (BigDecimal) DatabaseHelper.getColumnValue(
+							objs, SkuMaster.COLUMN_ITEM_STD_PRICE,
+							SkuMaster.COLUMNS);
 					item.lumpSum = item.price.multiply(new BigDecimal(
 							item.count));
 
@@ -313,10 +319,14 @@ public class Main {
 			Button buttonPay = (Button) linearLayoutPayMethod
 					.findViewById(buttonPays[i]);
 			if (i < objss.length) {
-				buttonPay.setText((String) parent.paymentMaster.getColumnValue(
-						objss[i], PaymentMaster.COLUMN_NAME));
-				final int id = (Integer) parent.paymentMaster.getColumnValue(
-						objss[i], PaymentMaster.COLUMN_ID);
+
+				buttonPay.setText((String) DatabaseHelper.getColumnValue(
+						objss[i], PaymentMaster.COLUMN_NAME,
+						PaymentMaster.COLUMNS));
+
+				final int id = (Integer) DatabaseHelper.getColumnValue(
+						objss[i], PaymentMaster.COLUMN_ID,
+						PaymentMaster.COLUMNS);
 
 				parent.mapPaymentMaster.put(id, objss[i]);
 
@@ -329,7 +339,7 @@ public class Main {
 						editSearch.setText("");
 
 						listViewNotifyDataSetChanged(R.id.listViewPay);
-						
+
 						setTotal();
 
 						setButtonPay();
@@ -393,7 +403,6 @@ public class Main {
 		((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
 	}
 
-	
 	public void setTotal() {
 		((TextView) parent.findViewById(R.id.all_item_fee))
 				.setText(getTotalItemStdPrice().toString());

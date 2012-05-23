@@ -1,6 +1,7 @@
 package com.netsdl.android.main.view;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.method.PasswordTransformationMethod;
@@ -14,7 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.netsdl.android.common.Constant;
 import com.netsdl.android.common.Util;
+import com.netsdl.android.common.db.DatabaseHelper;
+import com.netsdl.android.common.db.SkuMaster;
 import com.netsdl.android.common.db.StoreMaster;
 import com.netsdl.android.main.R;
 
@@ -143,11 +147,11 @@ public class Login {
 								.toString());
 						ContentResolver contentResolver = parent
 								.getContentResolver();
-						
+
 						Cursor cursor = contentResolver.query(
-								Uri.parse("content://com.netsdl.android.init.provider.Provider"),
-								null, null, null, null);
-						
+								Constant.PROVIDER_URI_STORE_MASTER,
+								StoreMaster.COLUMNS, null, null, null);
+
 						Log.d("cursor",
 								cursor == null ? "null" : cursor.toString());
 
@@ -162,9 +166,11 @@ public class Login {
 						} else {
 
 							status = Status.password;
-							String name = (String) parent.storeMaster
+
+							String name = (String) DatabaseHelper
 									.getColumnValue(storeObjs,
-											StoreMaster.COLUMN_NAME);
+											StoreMaster.COLUMN_NAME,
+											StoreMaster.COLUMNS);
 
 							((TextView) parent
 									.findViewById(R.id.textViewUsername))
@@ -192,9 +198,9 @@ public class Login {
 					if (editText.getText().toString().length() > 0) {
 						String str1 = Util
 								.getMD5(editText.getText().toString());
-						String str2 = (String) parent.storeMaster
-								.getColumnValue(storeObjs,
-										StoreMaster.COLUMN_MD5);
+						String str2 = (String) DatabaseHelper.getColumnValue(
+								storeObjs, StoreMaster.COLUMN_MD5,
+								StoreMaster.COLUMNS);
 						if (str1.equals(str2)) {
 							// parent.main.init();
 							// parent.type.init();

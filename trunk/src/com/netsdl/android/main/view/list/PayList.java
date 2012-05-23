@@ -1,5 +1,6 @@
 package com.netsdl.android.main.view.list;
 
+import com.netsdl.android.common.db.DatabaseHelper;
 import com.netsdl.android.common.db.PaymentMaster;
 import com.netsdl.android.common.view.list.Currentable;
 import com.netsdl.android.main.R;
@@ -89,8 +90,9 @@ public class PayList {
 					new Integer[] {});
 			Object[] objs = grandpa.mapPaymentMaster.get(paymentIDs[position]);
 
-			holder.payMethodName.setText((String) objs[grandpa.paymentMaster
-					.getColumnIndex(PaymentMaster.COLUMN_NAME)]);
+			holder.payMethodName.setText((String) objs[DatabaseHelper
+					.getColumnIndex(PaymentMaster.COLUMN_NAME,
+							PaymentMaster.COLUMNS)]);
 			holder.fee.setText(grandpa.mapPay.get(paymentIDs[position])
 					.toString());
 

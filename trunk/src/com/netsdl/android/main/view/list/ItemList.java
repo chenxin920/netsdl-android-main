@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.netsdl.android.common.db.DatabaseHelper;
+import com.netsdl.android.common.db.PaymentMaster;
 import com.netsdl.android.common.db.SkuMaster;
 import com.netsdl.android.common.view.list.Currentable;
 import com.netsdl.android.main.R;
@@ -60,7 +62,7 @@ public class ItemList {
 				Integer[] skuIDs = grandpa.mapItem.keySet().toArray(
 						new Integer[] {});
 				ItemDialog itemDialog = new ItemDialog(grandpa, grandpa.mapItem
-						.get(skuIDs[position]),position);
+						.get(skuIDs[position]), position);
 				grandpa.mapDialogable.put(itemDialog.hashCode(), itemDialog);
 				grandpa.showDialog(itemDialog.hashCode());
 
@@ -122,12 +124,16 @@ public class ItemList {
 					new Integer[] {});
 			Object[] objs = grandpa.mapSkuMaster.get(skuIDs[position]);
 
-			holder.itemCatName.setText((String) objs[grandpa.skuMaster
-					.getColumnIndex(SkuMaster.COLUMN_ITEM_CAT_NAME)]);
-			holder.skuPropName.setText((String) objs[grandpa.skuMaster
-					.getColumnIndex(SkuMaster.COLUMN_SKU_PROP_1_NAME)]
-					+ (String) objs[grandpa.skuMaster
-							.getColumnIndex(SkuMaster.COLUMN_SKU_PROP_2_NAME)]);
+			holder.itemCatName.setText((String) objs[DatabaseHelper
+					.getColumnIndex(SkuMaster.COLUMN_ITEM_CAT_NAME,
+							SkuMaster.COLUMNS)]);
+
+			holder.skuPropName.setText((String) objs[DatabaseHelper
+					.getColumnIndex(SkuMaster.COLUMN_SKU_PROP_1_NAME,
+							SkuMaster.COLUMNS)]
+					+ (String) objs[DatabaseHelper
+							.getColumnIndex(SkuMaster.COLUMN_SKU_PROP_2_NAME,
+									SkuMaster.COLUMNS)]);
 
 			holder.price.setText(grandpa.mapItem.get(skuIDs[position]).price
 					.toString());
