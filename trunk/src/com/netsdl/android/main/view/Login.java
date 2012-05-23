@@ -143,6 +143,7 @@ public class Login {
 								.toString());
 						ContentResolver contentResolver = parent
 								.getContentResolver();
+						
 						Cursor cursor = contentResolver.query(
 								Uri.parse("content://com.netsdl.android.init.provider.Provider"),
 								null, null, null, null);
