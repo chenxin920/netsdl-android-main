@@ -316,6 +316,8 @@ public class Main {
 		int[] buttonPays = new int[] { R.id.buttonPay1, R.id.buttonPay2,
 				R.id.buttonPay3, R.id.buttonPay4, R.id.buttonPay5,
 				R.id.buttonPay6, R.id.buttonPay7, R.id.buttonPay8 };
+		
+		
 		final Object[][] objss = parent.paymentMaster.getMultiColumn(
 				new String[] {}, new String[] {}, null, null,
 				new String[] { PaymentMaster.COLUMN_SORT }, null, true);
