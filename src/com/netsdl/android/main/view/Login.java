@@ -145,18 +145,32 @@ public class Login {
 					try {
 						int iTemp = Integer.parseInt(editText.getText()
 								.toString());
-						ContentResolver contentResolver = parent
-								.getContentResolver();
 
-						Cursor cursor = contentResolver.query(
-								Constant.PROVIDER_URI_STORE_MASTER,
-								StoreMaster.COLUMNS, null, null, null);
+						// storeObjs = DatabaseHelper.getSingleColumn(
+						// parent.getContentResolver(),
+						// Constant.PROVIDER_URI_STORE_MASTER,
+						// new Object[] { iTemp }, StoreMaster.TABLE_NAME,
+						// StoreMaster.COLUMNS, StoreMaster.TYPES,
+						// StoreMaster.KEYS);
 
-						Log.d("cursor",
-								cursor == null ? "null" : cursor.toString());
+						try {
+							storeObjs = DatabaseHelper.getSingleColumn(
+									parent.getContentResolver(),
+									new Object[] { iTemp }, StoreMaster.class);
+						} catch (IllegalArgumentException e1) {
+						} catch (SecurityException e1) {
+						} catch (IllegalAccessException e1) {
+						} catch (NoSuchFieldException e1) {
+						}
 
-						storeObjs = parent.storeMaster
-								.getSingleColumn(new Object[] { iTemp });
+						try {
+							storeObjs = parent.storeMaster
+									.getSingleColumn(new Object[] { iTemp });
+						} catch (IllegalArgumentException e) {
+						} catch (SecurityException e) {
+						} catch (IllegalAccessException e) {
+						} catch (NoSuchFieldException e) {
+						}
 
 						if (storeObjs == null) {
 
