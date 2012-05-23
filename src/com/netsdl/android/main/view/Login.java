@@ -146,13 +146,6 @@ public class Login {
 						int iTemp = Integer.parseInt(editText.getText()
 								.toString());
 
-						// storeObjs = DatabaseHelper.getSingleColumn(
-						// parent.getContentResolver(),
-						// Constant.PROVIDER_URI_STORE_MASTER,
-						// new Object[] { iTemp }, StoreMaster.TABLE_NAME,
-						// StoreMaster.COLUMNS, StoreMaster.TYPES,
-						// StoreMaster.KEYS);
-
 						try {
 							storeObjs = DatabaseHelper.getSingleColumn(
 									parent.getContentResolver(),
@@ -161,15 +154,6 @@ public class Login {
 						} catch (SecurityException e1) {
 						} catch (IllegalAccessException e1) {
 						} catch (NoSuchFieldException e1) {
-						}
-
-						try {
-							storeObjs = parent.storeMaster
-									.getSingleColumn(new Object[] { iTemp });
-						} catch (IllegalArgumentException e) {
-						} catch (SecurityException e) {
-						} catch (IllegalAccessException e) {
-						} catch (NoSuchFieldException e) {
 						}
 
 						if (storeObjs == null) {
