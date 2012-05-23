@@ -289,6 +289,10 @@ public class Main {
 				editSearch.setText("");
 			}
 		} catch (NumberFormatException nfe) {
+		} catch (IllegalArgumentException e) {
+		} catch (SecurityException e) {
+		} catch (IllegalAccessException e) {
+		} catch (NoSuchFieldException e) {
 		}
 	}
 
