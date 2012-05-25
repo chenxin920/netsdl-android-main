@@ -32,6 +32,7 @@ import com.netsdl.android.common.db.DatabaseHelper;
 import com.netsdl.android.common.db.PaymentMaster;
 import com.netsdl.android.common.db.PosTable;
 import com.netsdl.android.common.db.SkuMaster;
+import com.netsdl.android.common.db.StoreMaster;
 import com.netsdl.android.main.R;
 import com.netsdl.android.main.view.list.ItemList;
 import com.netsdl.android.main.view.list.PayList;
@@ -316,46 +317,57 @@ public class Main {
 		int[] buttonPays = new int[] { R.id.buttonPay1, R.id.buttonPay2,
 				R.id.buttonPay3, R.id.buttonPay4, R.id.buttonPay5,
 				R.id.buttonPay6, R.id.buttonPay7, R.id.buttonPay8 };
-		
-		
-		final Object[][] objss = parent.paymentMaster.getMultiColumn(
-				new String[] {}, new String[] {}, null, null,
-				new String[] { PaymentMaster.COLUMN_SORT }, null, true);
-		for (int i = 0; i < buttonPays.length; i++) {
-			Button buttonPay = (Button) linearLayoutPayMethod
-					.findViewById(buttonPays[i]);
-			if (i < objss.length) {
 
-				buttonPay.setText((String) DatabaseHelper.getColumnValue(
-						objss[i], PaymentMaster.COLUMN_NAME,
-						PaymentMaster.COLUMNS));
+		// final Object[][] objss = parent.paymentMaster.getMultiColumn(
+		// new String[] {}, new String[] {}, null, null,
+		// new String[] { PaymentMaster.COLUMN_SORT }, null, true);
 
-				final int id = (Integer) DatabaseHelper.getColumnValue(
-						objss[i], PaymentMaster.COLUMN_ID,
-						PaymentMaster.COLUMNS);
+		try {
+			final Object[][] objss = DatabaseHelper.getMultiColumn(parent.getContentResolver(),
+					new String[] {}, new String[] {}, null, null,
+					new String[] { PaymentMaster.COLUMN_SORT }, null, true,
+					PaymentMaster.class);
+			for (int i = 0; i < buttonPays.length; i++) {
+				Button buttonPay = (Button) linearLayoutPayMethod
+						.findViewById(buttonPays[i]);
+				if (i < objss.length) {
 
-				parent.mapPaymentMaster.put(id, objss[i]);
+					buttonPay.setText((String) DatabaseHelper.getColumnValue(
+							objss[i], PaymentMaster.COLUMN_NAME,
+							PaymentMaster.COLUMNS));
 
-				buttonPay.setOnClickListener(new View.OnClickListener() {
-					public void onClick(View v) {
-						if (editSearch.getText().toString().trim().length() <= 0)
-							return;
-						parent.mapPay.put(id, new BigDecimal(editSearch
-								.getText().toString()));
-						editSearch.setText("");
+					final int id = (Integer) DatabaseHelper.getColumnValue(
+							objss[i], PaymentMaster.COLUMN_ID,
+							PaymentMaster.COLUMNS);
 
-						listViewNotifyDataSetChanged(R.id.listViewPay);
+					parent.mapPaymentMaster.put(id, objss[i]);
 
-						setTotal();
+					buttonPay.setOnClickListener(new View.OnClickListener() {
+						public void onClick(View v) {
+							if (editSearch.getText().toString().trim().length() <= 0)
+								return;
+							parent.mapPay.put(id, new BigDecimal(editSearch
+									.getText().toString()));
+							editSearch.setText("");
 
-						setButtonPay();
-					}
-				});
-			} else {
-				buttonPay.setText("");
-				buttonPay.setEnabled(false);
+							listViewNotifyDataSetChanged(R.id.listViewPay);
+
+							setTotal();
+
+							setButtonPay();
+						}
+					});
+				} else {
+					buttonPay.setText("");
+					buttonPay.setEnabled(false);
+				}
+
 			}
 
+		} catch (IllegalArgumentException e) {
+		} catch (SecurityException e) {
+		} catch (IllegalAccessException e) {
+		} catch (NoSuchFieldException e) {
 		}
 
 	}
