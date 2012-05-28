@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
@@ -241,9 +242,15 @@ public class Main {
 		if (str.length() == 0)
 			return;
 		try {
-			Object[] objs = parent.skuMaster.getSingleColumn(
-					new Object[] { str },
-					new String[] { SkuMaster.COLUMN_BAR_CODE });
+			Object[] objs = DatabaseHelper.getSingleColumn(
+					parent.getContentResolver(), new Object[] { str },
+					new String[] { SkuMaster.COLUMN_BAR_CODE },
+					SkuMaster.class);
+
+			// Object[] objs = parent.skuMaster.getSingleColumn(
+			// new Object[] { str },
+			// new String[] { SkuMaster.COLUMN_BAR_CODE });
+
 			if (objs != null) {
 
 				Integer skuId = (Integer) DatabaseHelper.getColumnValue(objs,
@@ -323,8 +330,9 @@ public class Main {
 		// new String[] { PaymentMaster.COLUMN_SORT }, null, true);
 
 		try {
-			final Object[][] objss = DatabaseHelper.getMultiColumn(parent.getContentResolver(),
-					new String[] {}, new String[] {}, null, null,
+			final Object[][] objss = DatabaseHelper.getMultiColumn(
+					parent.getContentResolver(), new String[] {},
+					new String[] {}, null, null,
 					new String[] { PaymentMaster.COLUMN_SORT }, null, true,
 					PaymentMaster.class);
 			for (int i = 0; i < buttonPays.length; i++) {
@@ -381,8 +389,11 @@ public class Main {
 		for (Entry<Integer, Item> entry : parent.mapItem.entrySet()) {
 			Integer id = entry.getKey();
 			Item item = entry.getValue();
+			
 			parent.posTable.insert(new String[] { strUUID, PosTable.FLG_I,
 					id.toString(), item.count.toString(), timestamp });
+			
+			
 		}
 		for (Entry<Integer, BigDecimal> entry : parent.mapPay.entrySet()) {
 			Integer id = entry.getKey();

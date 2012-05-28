@@ -30,14 +30,6 @@ public class MainActivity extends Activity {
 
 	public Map<Integer, BigDecimal> mapPay;
 
-	public DbMaster dbMaster = null;
-
-	public SkuMaster skuMaster = null;
-
-	public StoreMaster storeMaster = null;
-
-	public PaymentMaster paymentMaster = null;
-
 	public PosTable posTable = null;
 
 	public Login login = null;
@@ -56,11 +48,7 @@ public class MainActivity extends Activity {
 		mapPaymentMaster = new HashMap<Integer, Object[]>();
 		mapItem = new HashMap<Integer, Item>();
 		mapPay = new HashMap<Integer, BigDecimal>();
-		dbMaster = new DbMaster(this);
-		skuMaster = new SkuMaster(this);
-		storeMaster = new StoreMaster(this);
-		paymentMaster = new PaymentMaster(this);
-		posTable = new PosTable(this);
+		//posTable = new PosTable(this);
 
 	}
 
