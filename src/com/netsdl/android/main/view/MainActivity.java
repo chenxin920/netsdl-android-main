@@ -38,6 +38,8 @@ public class MainActivity extends Activity {
 
 	public Function function = null;
 
+	public PreMain preMain = null;
+
 	public Type type = null;
 
 	public Main main = null;
@@ -60,6 +62,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		login = new Login(this);
 		function = new Function(this);
+		preMain = new PreMain(this);
 		type = Structs.Type.type1;
 		main = new Main(this);
 
