@@ -390,16 +390,32 @@ public class Main {
 			Integer id = entry.getKey();
 			Item item = entry.getValue();
 			
-			parent.posTable.insert(new String[] { strUUID, PosTable.FLG_I,
-					id.toString(), item.count.toString(), timestamp });
+			try {
+				DatabaseHelper.insert(parent.getContentResolver(), new String[] { strUUID, PosTable.FLG_I,
+						id.toString(), item.count.toString(), timestamp }, PosTable.class);
+			} catch (IllegalArgumentException e) {
+			} catch (SecurityException e) {
+			} catch (IllegalAccessException e) {
+			} catch (NoSuchFieldException e) {
+			}
+			
 			
 			
 		}
 		for (Entry<Integer, BigDecimal> entry : parent.mapPay.entrySet()) {
 			Integer id = entry.getKey();
 			BigDecimal count = entry.getValue();
-			parent.posTable.insert(new String[] { strUUID, PosTable.FLG_P,
-					id.toString(), count.toString(), timestamp });
+			try {
+				DatabaseHelper.insert(parent.getContentResolver(), new String[] { strUUID, PosTable.FLG_P,
+					id.toString(), count.toString(), timestamp }, PosTable.class);
+			} catch (IllegalArgumentException e) {
+			} catch (SecurityException e) {
+			} catch (IllegalAccessException e) {
+			} catch (NoSuchFieldException e) {
+			}
+			
+//			parent.posTable.insert(new String[] { strUUID, PosTable.FLG_P,
+//					id.toString(), count.toString(), timestamp });
 		}
 
 	}
