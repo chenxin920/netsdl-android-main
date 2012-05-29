@@ -57,10 +57,10 @@ public class Function {
 		for (final int id : ids) {
 			((Button) parent.findViewById(id))
 					.setOnClickListener(new OnClickListener() {
-
 						public void onClick(View v) {
 							currentID = id;
 							setFunction();
+							parent.preMain.init();
 						}
 					});
 		}
