@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.netsdl.android.common.Structs;
 import com.netsdl.android.common.Structs.Item;
+import com.netsdl.android.common.Structs.Type;
 import com.netsdl.android.common.db.DbMaster;
 import com.netsdl.android.common.db.PaymentMaster;
 import com.netsdl.android.common.db.PosTable;
@@ -58,7 +60,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		login = new Login(this);
 		function = new Function(this);
-		type = new Type(this);
+		type = Structs.Type.type1;
 		main = new Main(this);
 
 		login.init();

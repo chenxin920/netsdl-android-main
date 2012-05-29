@@ -392,15 +392,14 @@ public class Main {
 			Item item = entry.getValue();
 
 			try {
-				DatabaseHelper.insert(
-						parent.getContentResolver(),
-						new String[] { strUUID, timestamp,timestamp,
-								parent.type.dt.toString(),
-								parent.type.rt.toString(), "wh_no", "wh_name",
-								"cust_no", "cust_name", "user_no", "user_name",
-								"SKU", "sku_cd", "item_name", "2680.00",
-								"2078.00","2078.00", "1", "2680.00", "2078.00" },
-						PosTable.class);
+				DatabaseHelper.insert(parent.getContentResolver(),
+						new String[] { strUUID, timestamp, timestamp,
+								parent.type.toDocumentType().toString(),
+								parent.type.toRtnType().toString(), "wh_no",
+								"wh_name", "cust_no", "cust_name", "user_no",
+								"user_name", "SKU", "sku_cd", "item_name",
+								"2680.00", "2078.00", "2078.00", "1",
+								"2680.00", "2078.00" }, PosTable.class);
 			} catch (IllegalArgumentException e) {
 			} catch (SecurityException e) {
 			} catch (IllegalAccessException e) {
