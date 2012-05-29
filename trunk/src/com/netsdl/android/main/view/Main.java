@@ -55,7 +55,7 @@ public class Main {
 	final Button buttonPay;
 	final Button buttonConfirm;
 
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSSZ");
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	public Main(MainActivity parent) {
 		this.parent = parent;
@@ -242,10 +242,11 @@ public class Main {
 		if (str.length() == 0)
 			return;
 		try {
-			Object[] objs = DatabaseHelper.getSingleColumn(
-					parent.getContentResolver(), new Object[] { str },
-					new String[] { SkuMaster.COLUMN_BAR_CODE },
-					SkuMaster.class);
+			Object[] objs = DatabaseHelper
+					.getSingleColumn(parent.getContentResolver(),
+							new Object[] { str },
+							new String[] { SkuMaster.COLUMN_BAR_CODE },
+							SkuMaster.class);
 
 			// Object[] objs = parent.skuMaster.getSingleColumn(
 			// new Object[] { str },
@@ -389,33 +390,40 @@ public class Main {
 		for (Entry<Integer, Item> entry : parent.mapItem.entrySet()) {
 			Integer id = entry.getKey();
 			Item item = entry.getValue();
-			
+
 			try {
-				DatabaseHelper.insert(parent.getContentResolver(), new String[] { strUUID, PosTable.FLG_I,
-						id.toString(), item.count.toString(), timestamp }, PosTable.class);
+				DatabaseHelper.insert(
+						parent.getContentResolver(),
+						new String[] { strUUID, timestamp,timestamp,
+								parent.type.dt.toString(),
+								parent.type.rt.toString(), "wh_no", "wh_name",
+								"cust_no", "cust_name", "user_no", "user_name",
+								"SKU", "sku_cd", "item_name", "2680.00",
+								"2078.00","2078.00", "1", "2680.00", "2078.00" },
+						PosTable.class);
 			} catch (IllegalArgumentException e) {
 			} catch (SecurityException e) {
 			} catch (IllegalAccessException e) {
 			} catch (NoSuchFieldException e) {
 			}
-			
-			
-			
+
 		}
 		for (Entry<Integer, BigDecimal> entry : parent.mapPay.entrySet()) {
 			Integer id = entry.getKey();
 			BigDecimal count = entry.getValue();
-			try {
-				DatabaseHelper.insert(parent.getContentResolver(), new String[] { strUUID, PosTable.FLG_P,
-					id.toString(), count.toString(), timestamp }, PosTable.class);
-			} catch (IllegalArgumentException e) {
-			} catch (SecurityException e) {
-			} catch (IllegalAccessException e) {
-			} catch (NoSuchFieldException e) {
-			}
-			
-//			parent.posTable.insert(new String[] { strUUID, PosTable.FLG_P,
-//					id.toString(), count.toString(), timestamp });
+
+			// try {
+			// DatabaseHelper.insert(parent.getContentResolver(), new String[] {
+			// strUUID, PosTable.FLG_P,
+			// id.toString(), count.toString(), timestamp }, PosTable.class);
+			// } catch (IllegalArgumentException e) {
+			// } catch (SecurityException e) {
+			// } catch (IllegalAccessException e) {
+			// } catch (NoSuchFieldException e) {
+			// }
+
+			// parent.posTable.insert(new String[] { strUUID, PosTable.FLG_P,
+			// id.toString(), count.toString(), timestamp });
 		}
 
 	}
