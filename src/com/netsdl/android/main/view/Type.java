@@ -16,11 +16,11 @@ public class Type {
 	final LayoutInflater inflater;
 	final LinearLayout linearLayoutType;
 	final FrameLayout coreLayout;
-	
+
 	public InnerType type = InnerType.type1;
 	DocumentType dt = DocumentType.D0;
 	RtnType rt = RtnType.P1;
-	
+
 	MainActivity parent;
 
 	public Type(MainActivity parent) {
@@ -29,20 +29,20 @@ public class Type {
 		view = inflater.inflate(LAYOUT_COMMON33, null);
 		linearLayoutType = (LinearLayout) inflater.inflate(R.layout.type, null);
 		coreLayout = (FrameLayout) view.findViewById(R.id.core);
-		
+
 	}
 
 	public void init() {
 		parent.setContentView(view);
 		coreLayout.removeAllViews();
 		coreLayout.addView(linearLayoutType);
-		
+
 		setType();
-		
+
 		initType();
-		
+
 	}
-	
+
 	private void setType() {
 		int[] ids = new int[] { R.id.buttonType1, R.id.buttonType2,
 				R.id.buttonType3 };
@@ -53,7 +53,7 @@ public class Type {
 		((Button) parent.findViewById(ids[InnerType.getIndex(type)]))
 				.setBackgroundColor(Color.CYAN);
 	}
-	
+
 	private void initType() {
 		int[] ids = new int[] { R.id.buttonType1, R.id.buttonType2,
 				R.id.buttonType3 };
@@ -114,12 +114,31 @@ public class Type {
 			return -1;
 		}
 	}
+
 	public enum DocumentType {
-		D0, R0;
+		D0 {
+			public String toString() {
+				return "DO";
+			}
+		},
+		R0 {
+			public String toString() {
+				return "RO";
+			}
+		};
 
 	}
 
 	public enum RtnType {
-		P1, M1
+		P1 {
+			public String toString() {
+				return "1";
+			}
+		},
+		M1 {
+			public String toString() {
+				return "-1";
+			}
+		}
 	}
 }
