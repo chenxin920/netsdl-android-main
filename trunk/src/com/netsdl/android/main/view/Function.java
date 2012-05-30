@@ -1,5 +1,6 @@
 package com.netsdl.android.main.view;
 
+import com.netsdl.android.common.Structs.Type;
 import com.netsdl.android.main.R;
 
 import android.graphics.Color;
@@ -20,14 +21,18 @@ public class Function {
 
 	int[] ids = new int[] { R.id.buttonType1, R.id.buttonType2,
 			R.id.buttonType3, R.id.buttonFunction2 };
+	Type[] types = new Type[] { Type.type1, Type.type2, Type.type3 };
+
 	int currentID = R.id.buttonType1;
 
 	public Function(MainActivity parent) {
 		this.parent = parent;
 		inflater = LayoutInflater.from(parent);
 		view = inflater.inflate(LAYOUT_COMMON33, null);
+
 		linearLayoutType = (LinearLayout) inflater.inflate(R.layout.function,
 				null);
+
 		coreLayout = (FrameLayout) view.findViewById(R.id.core);
 
 	}
@@ -48,8 +53,13 @@ public class Function {
 			((Button) parent.findViewById(id))
 					.setBackgroundColor(Color.TRANSPARENT);
 		}
-		((Button) parent.findViewById(ids[getIndex(currentID)]))
+		((Button) parent.findViewById(currentID))
 				.setBackgroundColor(Color.CYAN);
+
+		parent.type = types[getIndex(currentID)];
+
+		// ((Button) parent.findViewById(ids[getIndex(currentID)]))
+		// .setBackgroundColor(Color.CYAN);
 
 	}
 

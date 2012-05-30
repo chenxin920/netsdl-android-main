@@ -42,14 +42,14 @@
                         android:layout_height="fill_parent"
                         android:layout_weight="2"
                         android:text="@string/lumpSum"
-                        android:textColor="@drawable/black"/>
+                        android:textColor="@drawable/black" />
 
                     <TextView
                         android:id="@+id/all_item_fee"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:layout_weight="1" 
-                        android:textColor="@drawable/black"/>
+                        android:layout_weight="1"
+                        android:textColor="@drawable/black" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -83,8 +83,8 @@
                         android:id="@+id/all_pay_fee"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:layout_weight="1" 
-                        android:textColor="@drawable/black"/>
+                        android:layout_weight="1"
+                        android:textColor="@drawable/black" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -120,6 +120,20 @@
                     android:text="0"
                     android:textColor="@drawable/black" />
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="8"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/buttonReturn"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="@string/Return" />
+
         </LinearLayout>
     </LinearLayout>
 

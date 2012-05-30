@@ -49,10 +49,10 @@
     <string name="msg_no_sku">无此商品</string>
     <string name="s_view_btn">s_view_btn</string>
     <string name="Confirm">确认</string>
-    <string name="type1">顾客贩卖</string>
-    <string name="type2">顾客反品</string>
-    <string name="type3">移动搬出</string>
-    <string name="type4">移动搬入</string>
+    <string name="type1">店铺销售</string>
+    <string name="type2">客户退货</string>
+    <string name="type3">店铺移出</string>
+    <string name="type4">店铺移入</string>
     <string name="item_change">项目修改</string>
     <string name="function1">门店录入业务</string>
     <string name="function2">门店查询业务</string>
@@ -62,6 +62,10 @@
     <string name="document_date">单据日期</string>
     <string name="operator">操作人</string>
     <string name="remarks">备注</string>
+    <string name="OutOfShop">移出店</string>
+    <string name="MovedToShop">移入店</string>
+    <string name="OutOfType">移出类型</string>
     
+
     
 </resources>
