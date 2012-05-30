@@ -54,6 +54,7 @@ public class Main {
 
 	final Button buttonPay;
 	final Button buttonConfirm;
+	final Button buttonReturn;
 
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -77,6 +78,7 @@ public class Main {
 
 		buttonPay = (Button) view.findViewById(R.id.buttonPay);
 		buttonConfirm = (Button) view.findViewById(R.id.buttonConfirm);
+		buttonReturn = (Button) view.findViewById(R.id.buttonReturn);
 
 	}
 
@@ -134,6 +136,14 @@ public class Main {
 
 						setButtonPay();
 
+					}
+
+				});
+
+		((Button) parent.findViewById(R.id.buttonReturn))
+				.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						parent.preMain.init();
 					}
 				});
 

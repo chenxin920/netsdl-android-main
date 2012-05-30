@@ -8,13 +8,13 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:orientation="horizontal" >
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="@string/type1" />
+            android:text="@string/type3" />
         
     </LinearLayout>
     
@@ -39,7 +39,7 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="@string/shop"
+                    android:text="@string/OutOfShop"
                     android:textColor="@drawable/black" />
             </LinearLayout>
 
@@ -60,6 +60,42 @@
             </LinearLayout>
         </LinearLayout>
 
+         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/MovedToShop"
+                    android:textColor="@drawable/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <EditText
+                    android:id="@+id/editShop"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="久光DP" >
+
+                    <requestFocus />
+                </EditText>
+            </LinearLayout>
+        </LinearLayout>
+        
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -75,7 +111,7 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="@string/customer"
+                    android:text="@string/OutOfType"
                     android:textColor="@drawable/black" />
             </LinearLayout>
 
@@ -89,7 +125,7 @@
                     android:id="@+id/editCustomer"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="通用顾客" >
+                    android:text="移出" >
 
                     <requestFocus />
                 </EditText>
@@ -205,7 +241,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:orientation="horizontal" >
 
         <LinearLayout
