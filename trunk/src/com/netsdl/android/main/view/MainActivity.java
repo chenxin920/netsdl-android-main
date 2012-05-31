@@ -16,7 +16,13 @@ import com.netsdl.android.common.view.dialog.Dialogable;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -45,14 +51,14 @@ public class MainActivity extends Activity {
 	public Main main = null;
 
 	public MainActivity() {
-		
+
 		mapDialogable = new HashMap<Integer, Dialogable>();
 		mapStoreMaster = new HashMap<Integer, Object[]>();
 		mapSkuMaster = new HashMap<Integer, Object[]>();
 		mapPaymentMaster = new HashMap<Integer, Object[]>();
 		mapItem = new HashMap<Integer, Item>();
 		mapPay = new HashMap<Integer, BigDecimal>();
-		//posTable = new PosTable(this);
+		// posTable = new PosTable(this);
 
 	}
 
@@ -60,6 +66,18 @@ public class MainActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		String ACTION_VIEW = "com.netsdl.android.intent.ACTION_VIEW";
+		super.registerReceiver(new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				Toast.makeText(context, "onReceive", Toast.LENGTH_SHORT).show();
+				Log.d("context", context.toString());
+				Log.d("intent", intent.toString());
+			}
+		}, new IntentFilter(ACTION_VIEW));
+
 		login = new Login(this);
 		function = new Function(this);
 		preMain = new PreMain(this);
@@ -67,7 +85,7 @@ public class MainActivity extends Activity {
 		main = new Main(this);
 
 		login.init();
-		
+
 	}
 
 	@Override
