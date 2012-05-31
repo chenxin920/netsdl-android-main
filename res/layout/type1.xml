@@ -4,7 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -15,9 +14,8 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="@string/type1" />
-        
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -53,9 +51,8 @@
                     android:id="@+id/editShop"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:enabled="false"
                     android:text="久光AR" >
-
-                    <requestFocus />
                 </EditText>
             </LinearLayout>
         </LinearLayout>
@@ -89,9 +86,8 @@
                     android:id="@+id/editCustomer"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:enabled="false"
                     android:text="通用顾客" >
-
-                    <requestFocus />
                 </EditText>
             </LinearLayout>
         </LinearLayout>
@@ -120,12 +116,14 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:orientation="vertical" >
-
+
                 <EditText
                     android:id="@+id/editDocumentDate"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="2001-5-29" />
+                    android:inputType="date"
+                    android:text="2012-5-29" />
+
             </LinearLayout>
         </LinearLayout>
 
@@ -159,8 +157,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:text="张三" >
-
-                    <requestFocus />
                 </EditText>
             </LinearLayout>
         </LinearLayout>
@@ -195,8 +191,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:text="" >
-
-                    <requestFocus />
                 </EditText>
             </LinearLayout>
         </LinearLayout>
