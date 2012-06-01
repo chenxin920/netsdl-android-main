@@ -53,7 +53,7 @@
                     android:id="@+id/editShop"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="久光AR" >
+                    android:enabled="false" >
 
                     <requestFocus />
                 </EditText>
@@ -89,7 +89,7 @@
                     android:id="@+id/editShop"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="久光DP" >
+                    android:enabled="false" >
 
                     <requestFocus />
                 </EditText>
@@ -125,7 +125,7 @@
                     android:id="@+id/editCustomer"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="移出" >
+                    android:enabled="false" >
 
                     <requestFocus />
                 </EditText>

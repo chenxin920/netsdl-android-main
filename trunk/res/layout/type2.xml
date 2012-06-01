@@ -4,20 +4,18 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:orientation="horizontal" >
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="@string/type2" />
-        
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -53,7 +51,7 @@
                     android:id="@+id/editShop"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="久光AR" >
+                    android:enabled="false" >
 
                     <requestFocus />
                 </EditText>
@@ -89,7 +87,43 @@
                     android:id="@+id/editCustomer"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="通用顾客" >
+                    android:enabled="false" >
+
+                    <requestFocus />
+                </EditText>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/SalesType"
+                    android:textColor="@drawable/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <EditText
+                    android:id="@+id/editCustomer"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:enabled="false" >
 
                     <requestFocus />
                 </EditText>
@@ -205,7 +239,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:orientation="horizontal" >
 
         <LinearLayout

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello">Hello World, NetSDLActivity!</string>
-    <string name="app_name">NetSDL</string>
+    <string name="app_name">NetSDL 小强 POS</string>
     <string name="blank"></string>
     <string name="operaterID">用户编号输入</string>
     <string name="username">用户名</string>
@@ -65,7 +65,8 @@
     <string name="OutOfShop">移出店</string>
     <string name="MovedToShop">移入店</string>
     <string name="OutOfType">移出类型</string>
-    
+    <string name="SalesType">销售类型</string>
+        
 
     
 </resources>
