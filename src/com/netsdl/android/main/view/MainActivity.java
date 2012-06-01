@@ -67,17 +67,6 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		String ACTION_VIEW = "com.netsdl.android.intent.ACTION_VIEW";
-		super.registerReceiver(new BroadcastReceiver() {
-
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				Toast.makeText(context, "onReceive", Toast.LENGTH_SHORT).show();
-				Log.d("context", context.toString());
-				Log.d("intent", intent.toString());
-			}
-		}, new IntentFilter(ACTION_VIEW));
-
 		login = new Login(this);
 		function = new Function(this);
 		preMain = new PreMain(this);
