@@ -7,6 +7,7 @@ import java.util.Map;
 import com.netsdl.android.common.Structs;
 import com.netsdl.android.common.Structs.Item;
 import com.netsdl.android.common.Structs.Type;
+import com.netsdl.android.common.Structs.DeviceItem;
 import com.netsdl.android.common.db.DbMaster;
 import com.netsdl.android.common.db.PaymentMaster;
 import com.netsdl.android.common.db.PosTable;
@@ -48,6 +49,8 @@ public class MainActivity extends Activity {
 
 	public Type type = null;
 
+	public DeviceItem deviceItem;
+
 	public Main main = null;
 
 	public MainActivity() {
@@ -71,6 +74,7 @@ public class MainActivity extends Activity {
 		function = new Function(this);
 		preMain = new PreMain(this);
 		type = Structs.Type.type1;
+		deviceItem = new Structs().new DeviceItem();
 		main = new Main(this);
 
 		login.init();
