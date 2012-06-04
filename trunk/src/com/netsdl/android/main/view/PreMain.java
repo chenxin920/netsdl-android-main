@@ -14,7 +14,6 @@ import com.netsdl.android.main.R;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,6 +37,8 @@ public class PreMain {
 	final FrameLayout coreLayout;
 	MainActivity parent;
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	String[] spinnerOperatorNos;
+	String[] spinnerOperatorNames;
 
 	public PreMain(MainActivity parent) {
 		this.parent = parent;
@@ -51,7 +52,7 @@ public class PreMain {
 	public void init() {
 		parent.setContentView(view);
 		coreLayout.removeAllViews();
-
+		initPrinterIP();
 		switch (parent.type) {
 		case type1:
 			initType1();
@@ -90,13 +91,12 @@ public class PreMain {
 		((EditText) parent.findViewById(R.id.editDocumentDate))
 				.setOnTouchListener(new OnTouchListener() {
 
-					@Override
 					public boolean onTouch(View v, MotionEvent event) {
 
 						try {
 							if (event.getAction() == MotionEvent.ACTION_DOWN) {
 								Date date = sdf
-										.parse(parent.deviceItem.field_04);
+										.parse(parent.deviceItem.documentDate);
 								Calendar calendar = Calendar.getInstance();
 								calendar.setTime(date);
 
@@ -104,7 +104,6 @@ public class PreMain {
 										parent,
 										new OnDateSetListener() {
 
-											@Override
 											public void onDateSet(
 													DatePicker view, int year,
 													int monthOfYear,
@@ -122,7 +121,7 @@ public class PreMain {
 														.format(calendar
 																.getTime());
 
-												parent.deviceItem.field_04 = strDocumentDate;
+												parent.deviceItem.documentDate = strDocumentDate;
 												((EditText) parent
 														.findViewById(R.id.editDocumentDate))
 														.setText(strDocumentDate);
@@ -150,17 +149,17 @@ public class PreMain {
 
 		((Spinner) parent.findViewById(R.id.spinnerOperator))
 				.setOnItemSelectedListener(new OnItemSelectedListener() {
-					@Override
 					public void onItemSelected(AdapterView<?> adapterView,
 							View view, int position, long id) {
-						parent.deviceItem.field_05 = adapterView
-								.getItemAtPosition(position).toString();
+						parent.deviceItem.operator = new String[2];
+						parent.deviceItem.operator[0] = spinnerOperatorNos[position];
+						parent.deviceItem.operator[1] = spinnerOperatorNames[position];
+						// parent.deviceItem.operator[0] = adapterView
+						// .getItemAtPosition(position).toString();
 
 					}
 
-					@Override
 					public void onNothingSelected(AdapterView<?> parent) {
-						// TODO Auto-generated method stub
 
 					}
 				});
@@ -188,26 +187,27 @@ public class PreMain {
 			}
 
 			if (deviceMasterObjs != null) {
-				String strShop = (String) DatabaseHelper.getColumnValue(
+				String[] shop = ((String) DatabaseHelper.getColumnValue(
 						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_01,
-						DeviceMaster.COLUMNS);
+						DeviceMaster.COLUMNS)).split(";");
+
 				((EditText) parent.findViewById(R.id.editShop))
-						.setText(strShop);
-				parent.deviceItem.field_01 = strShop;
+						.setText(shop[1]);
+				parent.deviceItem.shop = shop;
 
-				String strCustName = (String) DatabaseHelper.getColumnValue(
+				String[] custom = ((String) DatabaseHelper.getColumnValue(
 						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_02,
-						DeviceMaster.COLUMNS);
+						DeviceMaster.COLUMNS)).split(";");
 				((EditText) parent.findViewById(R.id.editCustomer))
-						.setText(strCustName);
-				parent.deviceItem.field_02 = strCustName;
+						.setText(custom[1]);
+				parent.deviceItem.custom = custom;
 
-				String strSalesType = (String) DatabaseHelper.getColumnValue(
+				String[] salesType = ((String) DatabaseHelper.getColumnValue(
 						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_03,
-						DeviceMaster.COLUMNS);
+						DeviceMaster.COLUMNS)).split(";");
 				((EditText) parent.findViewById(R.id.editSalesType))
-						.setText(strSalesType);
-				parent.deviceItem.field_03 = strSalesType;
+						.setText(salesType[1]);
+				parent.deviceItem.salesType = salesType;
 
 				String strDocumentDate = (String) DatabaseHelper
 						.getColumnValue(deviceMasterObjs,
@@ -219,7 +219,7 @@ public class PreMain {
 					now.setTimeInMillis(System.currentTimeMillis());
 					strDocumentDate = sdf.format(now.getTime());
 				}
-				parent.deviceItem.field_04 = strDocumentDate;
+				parent.deviceItem.documentDate = strDocumentDate;
 				((EditText) parent.findViewById(R.id.editDocumentDate))
 						.setText(strDocumentDate);
 
@@ -228,19 +228,38 @@ public class PreMain {
 						DeviceMaster.COLUMNS);
 				Spinner spinnerOperator = (Spinner) parent
 						.findViewById(R.id.spinnerOperator);
-				String[] spinnerOperatorItems = strOperator.split(":");
+				spinnerOperatorNos = strOperator.split(":");
+				spinnerOperatorNames = new String[spinnerOperatorNos.length];
+				for (int i = 0; i < spinnerOperatorNos.length; i++) {
+					Object[] storeObjs = DatabaseHelper.getSingleColumn(parent
+							.getContentResolver(), new Object[] { Integer
+							.parseInt(spinnerOperatorNos[i]) },
+							StoreMaster.class);
+					if (storeObjs != null) {
+						spinnerOperatorNames[i] = (String) DatabaseHelper
+								.getColumnValue(storeObjs,
+										StoreMaster.COLUMN_NAME,
+										StoreMaster.COLUMNS);
+					} else {
+						spinnerOperatorNames[i] = "";
+					}
+
+				}
+
 				ArrayAdapter<String> adapter = new ArrayAdapter<String>(parent,
 						android.R.layout.simple_spinner_item,
-						spinnerOperatorItems);
+						spinnerOperatorNames);
 				spinnerOperator.setAdapter(adapter);
-				parent.deviceItem.field_05 = spinnerOperatorItems[0];
+				parent.deviceItem.operator = new String[2];
+				parent.deviceItem.operator[0] = spinnerOperatorNos[0];
+				parent.deviceItem.operator[1] = spinnerOperatorNames[0];
 
 				String strRemarks = (String) DatabaseHelper.getColumnValue(
 						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_06,
 						DeviceMaster.COLUMNS);
 				((EditText) parent.findViewById(R.id.editRemarks))
 						.setText(strRemarks);
-				parent.deviceItem.field_06 = strRemarks;
+				parent.deviceItem.remarks = strRemarks;
 			}
 
 		} catch (IllegalArgumentException e1) {
@@ -249,6 +268,27 @@ public class PreMain {
 		} catch (NoSuchFieldException e1) {
 		}
 
+	}
+
+	private void initPrinterIP() {
+		String strDeviceId = Util.getLocalDeviceId(parent);
+
+		try {
+			Object[] deviceMasterObjs = DatabaseHelper.getSingleColumn(
+					parent.getContentResolver(), new Object[] { "9",
+							strDeviceId }, DeviceMaster.class);
+
+			if (deviceMasterObjs != null) {
+				parent.printerURL = (String) DatabaseHelper.getColumnValue(
+						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_20,
+						DeviceMaster.COLUMNS);
+			}
+
+		} catch (IllegalArgumentException e) {
+		} catch (SecurityException e) {
+		} catch (IllegalAccessException e) {
+		} catch (NoSuchFieldException e) {
+		}
 	}
 
 }

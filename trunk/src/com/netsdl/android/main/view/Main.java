@@ -6,16 +6,12 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -26,14 +22,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.netsdl.android.common.Constant;
 import com.netsdl.android.common.Structs;
+import com.netsdl.android.common.Structs.DeviceItem;
+import com.netsdl.android.common.Structs.Type;
 import com.netsdl.android.common.Util;
 import com.netsdl.android.common.Structs.Item;
 import com.netsdl.android.common.db.DatabaseHelper;
 import com.netsdl.android.common.db.PaymentMaster;
 import com.netsdl.android.common.db.PosTable;
 import com.netsdl.android.common.db.SkuMaster;
-import com.netsdl.android.common.db.StoreMaster;
 import com.netsdl.android.main.R;
 import com.netsdl.android.main.view.list.ItemList;
 import com.netsdl.android.main.view.list.PayList;
@@ -184,7 +182,14 @@ public class Main {
 					editSearch.setText("");
 
 				} else {
-					closeThis();
+					try {
+						closeThis();
+					} catch (IllegalArgumentException e) {
+					} catch (SecurityException e) {
+					} catch (IllegalAccessException e) {
+					} catch (NoSuchFieldException e) {
+					}
+
 					// init();
 					parent.mapSkuMaster = new HashMap<Integer, Object[]>();
 					// parent.mapPaymentMaster = new HashMap<Integer,
@@ -391,7 +396,8 @@ public class Main {
 
 	}
 
-	private void closeThis() {
+	private void closeThis() throws IllegalArgumentException,
+			SecurityException, IllegalAccessException, NoSuchFieldException {
 		String strUUID = Util.getUUID();
 		Calendar now = Calendar.getInstance();
 		now.setTimeInMillis(System.currentTimeMillis());
@@ -401,40 +407,159 @@ public class Main {
 			Integer id = entry.getKey();
 			Item item = entry.getValue();
 
-			try {
-				DatabaseHelper.insert(parent.getContentResolver(),
-						new String[] { strUUID, timestamp, timestamp,
-								parent.type.toDocumentType().toString(),
-								parent.type.toRtnType().toString(), "wh_no",
-								"wh_name", "cust_no", "cust_name", "user_no",
-								"user_name", "SKU", "sku_cd", "item_name",
-								"2680.00", "2078.00", "2078.00", "1",
-								"2680.00", "2078.00" }, PosTable.class);
-			} catch (IllegalArgumentException e) {
-			} catch (SecurityException e) {
-			} catch (IllegalAccessException e) {
-			} catch (NoSuchFieldException e) {
-			}
+			Object[] objs = DatabaseHelper.getSingleColumn(
+					parent.getContentResolver(), new Object[] { id },
+					new String[] { SkuMaster.COLUMN_SKU_ID }, SkuMaster.class);
 
+			if (objs != null) {
+				DatabaseHelper.insert(
+						parent.getContentResolver(),
+						getInsertPosTableString(strUUID, timestamp,
+								parent.type, parent.deviceItem, item, objs),
+						PosTable.class);
+
+			}
 		}
 		for (Entry<Integer, BigDecimal> entry : parent.mapPay.entrySet()) {
 			Integer id = entry.getKey();
 			BigDecimal count = entry.getValue();
 
-			// try {
-			// DatabaseHelper.insert(parent.getContentResolver(), new String[] {
-			// strUUID, PosTable.FLG_P,
-			// id.toString(), count.toString(), timestamp }, PosTable.class);
-			// } catch (IllegalArgumentException e) {
-			// } catch (SecurityException e) {
-			// } catch (IllegalAccessException e) {
-			// } catch (NoSuchFieldException e) {
-			// }
+			Object[] objs = DatabaseHelper.getSingleColumn(
+					parent.getContentResolver(), new Object[] { id },
+					new String[] { PaymentMaster.COLUMN_ID },
+					PaymentMaster.class);
+			if (objs != null) {
+				DatabaseHelper.insert(
+						parent.getContentResolver(),
+						getInsertPosTableString(strUUID, timestamp,
+								parent.type, parent.deviceItem, count, objs),
+						PosTable.class);
+			}
 
-			// parent.posTable.insert(new String[] { strUUID, PosTable.FLG_P,
-			// id.toString(), count.toString(), timestamp });
 		}
 
+		String strs[] = getInsertPosTableString(strUUID, timestamp,
+				parent.type, parent.deviceItem, false);
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_SKU_CD,
+				PosTable.COLUMNS)] = Constant.ORDER_PAY_CHANGE_CD;
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_ITEM_NAME,
+				PosTable.COLUMNS)] = Constant.ORDER_PAY_CHANGE_NAME;
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_ITEM_COST,
+				PosTable.COLUMNS)] = "0";
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_S_PRICE,
+				PosTable.COLUMNS)] = "0";
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_P_PRICE,
+				PosTable.COLUMNS)] = "0";
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_QTY,
+				PosTable.COLUMNS)] = "1";
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_S_AMT,
+				PosTable.COLUMNS)] = "0";
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_P_AMT,
+				PosTable.COLUMNS)] = getTotalItemStdPrice().subtract(
+				getTotalPay()).toString();
+		DatabaseHelper
+				.insert(parent.getContentResolver(), strs, PosTable.class);
+
+	}
+
+	private String[] getInsertPosTableString(String strUUID, String timestamp,
+			Type type, DeviceItem deviceItem, Item item, Object[] objs) {
+		String strs[] = getInsertPosTableString(strUUID, timestamp, type,
+				deviceItem, true);
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_SKU_CD,
+				PosTable.COLUMNS)] = (String) DatabaseHelper.getColumnValue(
+				objs, SkuMaster.COLUMN_SKU_CD, SkuMaster.COLUMNS);
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_ITEM_NAME,
+				PosTable.COLUMNS)] = (String) DatabaseHelper.getColumnValue(
+				objs, SkuMaster.COLUMN_ITEM_NAME, SkuMaster.COLUMNS);
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_ITEM_COST,
+				PosTable.COLUMNS)] = ((BigDecimal) DatabaseHelper
+				.getColumnValue(objs, SkuMaster.COLUMN_ITEM_COST,
+						SkuMaster.COLUMNS)).toString();
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_S_PRICE,
+				PosTable.COLUMNS)] = ((BigDecimal) DatabaseHelper
+				.getColumnValue(objs, SkuMaster.COLUMN_ITEM_PRICE,
+						SkuMaster.COLUMNS)).toString();
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_P_PRICE,
+				PosTable.COLUMNS)] = item.price.toString();
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_QTY,
+				PosTable.COLUMNS)] = item.count.toString();
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_S_AMT,
+				PosTable.COLUMNS)] = ((BigDecimal) DatabaseHelper
+				.getColumnValue(objs, SkuMaster.COLUMN_ITEM_PRICE,
+						SkuMaster.COLUMNS))
+				.multiply(new BigDecimal(item.count)).toString();
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_P_AMT,
+				PosTable.COLUMNS)] = item.lumpSum.toString();
+
+		return strs;
+
+	}
+
+	private String[] getInsertPosTableString(String strUUID, String timestamp,
+			Type type, DeviceItem deviceItem, BigDecimal count, Object[] objs) {
+		String strs[] = getInsertPosTableString(strUUID, timestamp, type,
+				deviceItem, false);
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_SKU_CD,
+				PosTable.COLUMNS)] = ((Integer) DatabaseHelper.getColumnValue(
+				objs, PaymentMaster.COLUMN_ID, PaymentMaster.COLUMNS))
+				.toString();
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_ITEM_NAME,
+				PosTable.COLUMNS)] = (String) DatabaseHelper.getColumnValue(
+				objs, PaymentMaster.COLUMN_NAME, PaymentMaster.COLUMNS);
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_ITEM_COST,
+				PosTable.COLUMNS)] = "0";
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_S_PRICE,
+				PosTable.COLUMNS)] = "0";
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_P_PRICE,
+				PosTable.COLUMNS)] = "0";
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_QTY,
+				PosTable.COLUMNS)] = "1";
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_S_AMT,
+				PosTable.COLUMNS)] = "0";
+
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_P_AMT,
+				PosTable.COLUMNS)] = count.toString();
+
+		return strs;
+
+	}
+
+	private String[] getInsertPosTableString(String strUUID, String timestamp,
+			Type type, DeviceItem deviceItem, boolean isItem) {
+
+		String strs[] = new String[] { strUUID, parent.deviceItem.documentDate,
+				timestamp, parent.type.toDocumentType().toString(),
+				parent.type.toRtnType().toString(), parent.deviceItem.shop[0],
+				parent.deviceItem.shop[1], parent.deviceItem.custom[0],
+				parent.deviceItem.custom[1], parent.deviceItem.operator[0],
+				parent.deviceItem.operator[1],
+				isItem ? Constant.ORDER_FLAG_SKU : Constant.ORDER_FLAG_PAY, "",
+				"", "", "", "", "", "", "" };
+		return strs;
 	}
 
 	class EditSearchTextWatcher implements TextWatcher {
