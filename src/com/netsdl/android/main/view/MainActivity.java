@@ -53,6 +53,8 @@ public class MainActivity extends Activity {
 
 	public Main main = null;
 
+	public String printerURL = null;
+
 	public MainActivity() {
 
 		mapDialogable = new HashMap<Integer, Dialogable>();
