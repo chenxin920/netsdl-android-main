@@ -1,13 +1,16 @@
 package com.netsdl.android.main.view;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.netsdl.android.common.Structs;
 import com.netsdl.android.common.Structs.Item;
 import com.netsdl.android.common.Structs.Type;
 import com.netsdl.android.common.Structs.DeviceItem;
+import com.netsdl.android.common.db.DatabaseHelper;
 import com.netsdl.android.common.db.DbMaster;
 import com.netsdl.android.common.db.PaymentMaster;
 import com.netsdl.android.common.db.PosTable;
@@ -53,8 +56,6 @@ public class MainActivity extends Activity {
 
 	public Main main = null;
 
-	public String printerURL = null;
-
 	public MainActivity() {
 
 		mapDialogable = new HashMap<Integer, Dialogable>();
@@ -62,7 +63,36 @@ public class MainActivity extends Activity {
 		mapSkuMaster = new HashMap<Integer, Object[]>();
 		mapPaymentMaster = new HashMap<Integer, Object[]>();
 		mapItem = new HashMap<Integer, Item>();
-		mapPay = new HashMap<Integer, BigDecimal>();
+		//mapPay = new HashMap<Integer, BigDecimal>();
+		mapPay = new TreeMap<Integer, BigDecimal>(new Comparator<Integer>() {
+			public int compare(Integer lhs, Integer rhs) {
+				try {
+					Object[] objs = DatabaseHelper.getSingleColumn(
+							getContentResolver(), new Object[] { lhs },
+							new String[] { PaymentMaster.COLUMN_ID },
+							PaymentMaster.class);
+					Integer lhsSort = (Integer) DatabaseHelper.getColumnValue(
+							objs, PaymentMaster.COLUMN_SORT,
+							PaymentMaster.COLUMNS);
+
+					objs = DatabaseHelper.getSingleColumn(getContentResolver(),
+							new Object[] { rhs },
+							new String[] { PaymentMaster.COLUMN_ID },
+							PaymentMaster.class);
+					Integer rhsSort = (Integer) DatabaseHelper.getColumnValue(
+							objs, PaymentMaster.COLUMN_SORT,
+							PaymentMaster.COLUMNS);
+					return lhsSort - rhsSort;
+
+				} catch (IllegalArgumentException e) {
+				} catch (SecurityException e) {
+				} catch (IllegalAccessException e) {
+				} catch (NoSuchFieldException e) {
+				}
+				return 0;
+			}
+		});
+
 		// posTable = new PosTable(this);
 
 	}

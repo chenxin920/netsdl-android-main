@@ -174,6 +174,7 @@ public class PreMain {
 		String strDeviceId = Util.getLocalDeviceId(parent);
 		if (strDeviceId == null || strDeviceId.trim().length() == 0)
 			strDeviceId = Util.DEFAULT_LOCAL_DEVICE_ID;
+		parent.deviceItem.deviceID = strDeviceId;
 		try {
 			Object[] deviceMasterObjs = DatabaseHelper.getSingleColumn(
 					parent.getContentResolver(), new Object[] { "1",
@@ -279,9 +280,22 @@ public class PreMain {
 							strDeviceId }, DeviceMaster.class);
 
 			if (deviceMasterObjs != null) {
-				parent.printerURL = (String) DatabaseHelper.getColumnValue(
-						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_20,
-						DeviceMaster.COLUMNS);
+				parent.deviceItem.printWSDL = (String) DatabaseHelper
+						.getColumnValue(deviceMasterObjs,
+								DeviceMaster.COLUMN_FIELD_20,
+								DeviceMaster.COLUMNS);
+				parent.deviceItem.printNameSpace = (String) DatabaseHelper
+						.getColumnValue(deviceMasterObjs,
+								DeviceMaster.COLUMN_FIELD_19,
+								DeviceMaster.COLUMNS);
+				parent.deviceItem.printMethod = (String) DatabaseHelper
+						.getColumnValue(deviceMasterObjs,
+								DeviceMaster.COLUMN_FIELD_18,
+								DeviceMaster.COLUMNS);
+				parent.deviceItem.printFlag = (String) DatabaseHelper
+						.getColumnValue(deviceMasterObjs,
+								DeviceMaster.COLUMN_FIELD_17,
+								DeviceMaster.COLUMNS);
 			}
 
 		} catch (IllegalArgumentException e) {
