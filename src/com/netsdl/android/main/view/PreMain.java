@@ -289,7 +289,7 @@ public class PreMain {
 			if (deviceMasterObjs == null) {
 				strDeviceId = Util.DEFAULT_LOCAL_DEVICE_ID;
 				deviceMasterObjs = DatabaseHelper.getSingleColumn(
-						parent.getContentResolver(), new Object[] { "1",
+						parent.getContentResolver(), new Object[] { "2",
 								strDeviceId }, DeviceMaster.class);
 				parent.deviceItem.deviceID = strDeviceId;
 			}
