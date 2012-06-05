@@ -58,8 +58,9 @@ public class PreMain {
 			initType1();
 			break;
 		case type2:
-			linearLayoutType = (LinearLayout) inflater.inflate(R.layout.type2,
-					null);
+			initType2();
+//			linearLayoutType = (LinearLayout) inflater.inflate(R.layout.type2,
+//					null);
 			break;
 		case type3:
 			linearLayoutType = (LinearLayout) inflater.inflate(R.layout.type3,
@@ -269,6 +270,111 @@ public class PreMain {
 		} catch (NoSuchFieldException e1) {
 		}
 
+	}
+	
+	private void initType2() {
+
+		linearLayoutType = (LinearLayout) inflater
+				.inflate(R.layout.type2, null);
+		coreLayout.addView(linearLayoutType);
+
+		String strDeviceId = Util.getLocalDeviceId(parent);
+		if (strDeviceId == null || strDeviceId.trim().length() == 0)
+			strDeviceId = Util.DEFAULT_LOCAL_DEVICE_ID;
+		parent.deviceItem.deviceID = strDeviceId;
+		try {
+			Object[] deviceMasterObjs = DatabaseHelper.getSingleColumn(
+					parent.getContentResolver(), new Object[] { "2",
+							strDeviceId }, DeviceMaster.class);
+			if (deviceMasterObjs == null) {
+				strDeviceId = Util.DEFAULT_LOCAL_DEVICE_ID;
+				deviceMasterObjs = DatabaseHelper.getSingleColumn(
+						parent.getContentResolver(), new Object[] { "1",
+								strDeviceId }, DeviceMaster.class);
+				parent.deviceItem.deviceID = strDeviceId;
+			}
+
+			if (deviceMasterObjs != null) {
+				String[] shop = ((String) DatabaseHelper.getColumnValue(
+						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_01,
+						DeviceMaster.COLUMNS)).split(";");
+
+				((EditText) parent.findViewById(R.id.editShop))
+						.setText(shop[1]);
+				parent.deviceItem.shop = shop;
+
+				String[] custom = ((String) DatabaseHelper.getColumnValue(
+						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_02,
+						DeviceMaster.COLUMNS)).split(";");
+				((EditText) parent.findViewById(R.id.editCustomer))
+						.setText(custom[1]);
+				parent.deviceItem.custom = custom;
+
+				String[] salesType = ((String) DatabaseHelper.getColumnValue(
+						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_03,
+						DeviceMaster.COLUMNS)).split(";");
+				((EditText) parent.findViewById(R.id.editSalesType))
+						.setText(salesType[1]);
+				parent.deviceItem.salesType = salesType;
+
+				String strDocumentDate = (String) DatabaseHelper
+						.getColumnValue(deviceMasterObjs,
+								DeviceMaster.COLUMN_FIELD_04,
+								DeviceMaster.COLUMNS);
+				if (strDocumentDate == null
+						|| strDocumentDate.trim().length() == 0) {
+					Calendar now = Calendar.getInstance();
+					now.setTimeInMillis(System.currentTimeMillis());
+					strDocumentDate = sdf.format(now.getTime());
+				}
+				parent.deviceItem.documentDate = strDocumentDate;
+				((EditText) parent.findViewById(R.id.editDocumentDate))
+						.setText(strDocumentDate);
+
+				String strOperator = (String) DatabaseHelper.getColumnValue(
+						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_05,
+						DeviceMaster.COLUMNS);
+				Spinner spinnerOperator = (Spinner) parent
+						.findViewById(R.id.spinnerOperator);
+				spinnerOperatorNos = strOperator.split(":");
+				spinnerOperatorNames = new String[spinnerOperatorNos.length];
+				for (int i = 0; i < spinnerOperatorNos.length; i++) {
+					Object[] storeObjs = DatabaseHelper.getSingleColumn(parent
+							.getContentResolver(), new Object[] { Integer
+							.parseInt(spinnerOperatorNos[i]) },
+							StoreMaster.class);
+					if (storeObjs != null) {
+						spinnerOperatorNames[i] = (String) DatabaseHelper
+								.getColumnValue(storeObjs,
+										StoreMaster.COLUMN_NAME,
+										StoreMaster.COLUMNS);
+					} else {
+						spinnerOperatorNames[i] = "";
+					}
+
+				}
+
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(parent,
+						android.R.layout.simple_spinner_item,
+						spinnerOperatorNames);
+				spinnerOperator.setAdapter(adapter);
+				parent.deviceItem.operator = new String[2];
+				parent.deviceItem.operator[0] = spinnerOperatorNos[0];
+				parent.deviceItem.operator[1] = spinnerOperatorNames[0];
+
+				String strRemarks = (String) DatabaseHelper.getColumnValue(
+						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_06,
+						DeviceMaster.COLUMNS);
+				((EditText) parent.findViewById(R.id.editRemarks))
+						.setText(strRemarks);
+				parent.deviceItem.remarks = strRemarks;
+			}
+
+		} catch (IllegalArgumentException e1) {
+		} catch (SecurityException e1) {
+		} catch (IllegalAccessException e1) {
+		} catch (NoSuchFieldException e1) {
+		}
 	}
 
 	private void initPrinterIP() {
