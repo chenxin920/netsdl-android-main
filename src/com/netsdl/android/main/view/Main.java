@@ -6,6 +6,11 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
+
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -402,6 +407,7 @@ public class Main {
 		Calendar now = Calendar.getInstance();
 		now.setTimeInMillis(System.currentTimeMillis());
 		String timestamp = sdf.format(now.getTime());
+		StringBuffer sbItems = new StringBuffer();
 
 		for (Entry<Integer, Item> entry : parent.mapItem.entrySet()) {
 			Integer id = entry.getKey();
@@ -418,8 +424,24 @@ public class Main {
 								parent.type, parent.deviceItem, item, objs),
 						PosTable.class);
 
+				sbItems.append((String) DatabaseHelper.getColumnValue(objs,
+						SkuMaster.COLUMN_SKU_CD, SkuMaster.COLUMNS));
+				sbItems.append(":");
+				sbItems.append((String) DatabaseHelper.getColumnValue(objs,
+						SkuMaster.COLUMN_ITEM_CAT_NAME, SkuMaster.COLUMNS));
+				sbItems.append(":");
+
+				sbItems.append(item.price);
+				sbItems.append(":");
+				sbItems.append(item.count);
+				sbItems.append(":");
+				sbItems.append(item.lumpSum);
+				sbItems.append(";");
 			}
 		}
+
+		StringBuffer sbPays = new StringBuffer();
+
 		for (Entry<Integer, BigDecimal> entry : parent.mapPay.entrySet()) {
 			Integer id = entry.getKey();
 			BigDecimal count = entry.getValue();
@@ -434,6 +456,8 @@ public class Main {
 						getInsertPosTableString(strUUID, timestamp,
 								parent.type, parent.deviceItem, count, objs),
 						PosTable.class);
+				sbPays.append(count.toString());
+				sbPays.append(";");
 			}
 
 		}
@@ -468,6 +492,54 @@ public class Main {
 		DatabaseHelper
 				.insert(parent.getContentResolver(), strs, PosTable.class);
 
+		printThis(strUUID, timestamp, sbItems.toString(), sbPays.toString());
+
+	}
+
+	private void printThis(String strUUID, String timestamp, String items,
+			String pays) {
+		StringBuffer sbHead = new StringBuffer();
+
+		sbHead.append(parent.deviceItem.shop[1]);
+		sbHead.append(";");
+
+		sbHead.append(strUUID);
+		sbHead.append(";");
+
+		sbHead.append(timestamp);
+		sbHead.append(";");
+
+		sbHead.append(parent.deviceItem.operator[1]);
+		sbHead.append(";");
+
+		sbHead.append(parent.deviceItem.deviceID);
+
+		SoapObject rpc = new SoapObject(parent.deviceItem.printNameSpace,
+				parent.deviceItem.printMethod);
+
+		rpc.addProperty("heads", sbHead.toString());
+		rpc.addProperty("items", items);
+		rpc.addProperty("pays", pays);
+		rpc.addProperty("remarks", parent.deviceItem.remarks);
+		rpc.addProperty("isPrintOut",
+				Boolean.valueOf(parent.deviceItem.printFlag));
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+				SoapEnvelope.VER12);
+
+		envelope.bodyOut = rpc;
+		envelope.dotNet = true;
+		envelope.setOutputSoapObject(rpc);
+
+		HttpTransportSE ht = new HttpTransportSE(parent.deviceItem.printWSDL);
+		ht.debug = true;
+		try {
+			ht.call(parent.deviceItem.printNameSpace, envelope);
+
+			// SoapObject result = (SoapObject) envelope.getResponse();
+			Object object = (Object) envelope.getResponse();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private String[] getInsertPosTableString(String strUUID, String timestamp,
