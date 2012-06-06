@@ -1,5 +1,6 @@
 package com.netsdl.android.main.view;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -10,8 +11,11 @@ import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -187,12 +191,41 @@ public class Main {
 					editSearch.setText("");
 
 				} else {
+					boolean isPrintOK = true;
 					try {
 						closeThis();
 					} catch (IllegalArgumentException e) {
 					} catch (SecurityException e) {
 					} catch (IllegalAccessException e) {
 					} catch (NoSuchFieldException e) {
+					} catch (IOException e) {
+						e.printStackTrace();
+						isPrintOK = false;
+					} catch (XmlPullParserException e) {
+						e.printStackTrace();
+						isPrintOK = false;
+					}
+					if (!isPrintOK) {
+						AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+								parent);
+						alertDialogBuilder.setTitle("小票打印错误");
+						alertDialogBuilder.setMessage("请确认打印服务是否良好");
+						alertDialogBuilder.setPositiveButton("OK",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int which) {
+									}
+								});
+
+						alertDialogBuilder.setNegativeButton("No",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int which) {
+									}
+								});
+						alertDialogBuilder.setCancelable(false);
+						AlertDialog alertDialog = alertDialogBuilder.create();
+						alertDialog.show();
 					}
 
 					// init();
@@ -402,7 +435,8 @@ public class Main {
 	}
 
 	private void closeThis() throws IllegalArgumentException,
-			SecurityException, IllegalAccessException, NoSuchFieldException {
+			SecurityException, IllegalAccessException, NoSuchFieldException,
+			IOException, XmlPullParserException {
 		String strUUID = Util.getUUID();
 		Calendar now = Calendar.getInstance();
 		now.setTimeInMillis(System.currentTimeMillis());
@@ -497,7 +531,11 @@ public class Main {
 	}
 
 	private void printThis(String strUUID, String timestamp, String items,
-			String pays) {
+			String pays) throws IOException, XmlPullParserException {
+		if (parent.deviceItem.printWSDL == null
+				|| parent.deviceItem.printWSDL.trim().length() == 0)
+			return;
+
 		StringBuffer sbHead = new StringBuffer();
 
 		sbHead.append(parent.deviceItem.shop[1]);
@@ -530,16 +568,12 @@ public class Main {
 		envelope.dotNet = true;
 		envelope.setOutputSoapObject(rpc);
 
-		HttpTransportSE ht = new HttpTransportSE(parent.deviceItem.printWSDL);
-		ht.debug = true;
-		try {
-			ht.call(parent.deviceItem.printNameSpace, envelope);
-
-			// SoapObject result = (SoapObject) envelope.getResponse();
-			Object object = (Object) envelope.getResponse();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		HttpTransportSE httpTransportSE = new HttpTransportSE(
+				parent.deviceItem.printWSDL);
+		httpTransportSE.debug = true;
+		httpTransportSE.call(parent.deviceItem.printNameSpace, envelope);
+		// SoapObject result = (SoapObject) envelope.getResponse();
+		Object object = (Object) envelope.getResponse();
 	}
 
 	private String[] getInsertPosTableString(String strUUID, String timestamp,
