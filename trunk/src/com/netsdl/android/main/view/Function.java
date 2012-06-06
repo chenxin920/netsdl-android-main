@@ -1,5 +1,7 @@
 package com.netsdl.android.main.view;
 
+import java.io.Serializable;
+
 import com.netsdl.android.common.Structs.Type;
 import com.netsdl.android.main.R;
 
@@ -11,7 +13,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-public class Function {
+public class Function implements Serializable{
+	private static final long serialVersionUID = -6278358790823628345L;
 	public static final int LAYOUT_COMMON33 = R.layout.common33;
 	final View view;
 	final LayoutInflater inflater;
@@ -38,6 +41,7 @@ public class Function {
 	}
 
 	public void init() {
+		parent.status = MainActivity.Status.Function;
 		parent.setContentView(view);
 		coreLayout.removeAllViews();
 		coreLayout.addView(linearLayoutType);

@@ -1,5 +1,6 @@
 package com.netsdl.android.main.view;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,7 +30,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
-public class PreMain {
+public class PreMain implements Serializable{
+	private static final long serialVersionUID = -2247415221616565187L;
 	public static final int LAYOUT_COMMON33 = R.layout.common33;
 	final View view;
 	final LayoutInflater inflater;
@@ -50,6 +52,7 @@ public class PreMain {
 	}
 
 	public void init() {
+		parent.status = MainActivity.Status.PreMain;
 		parent.setContentView(view);
 		coreLayout.removeAllViews();
 		initPrinterIP();

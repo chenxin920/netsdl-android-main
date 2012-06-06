@@ -1,5 +1,7 @@
 package com.netsdl.android.main.view;
 
+import java.io.Serializable;
+
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +16,10 @@ import com.netsdl.android.common.Util;
 import com.netsdl.android.common.db.DatabaseHelper;
 import com.netsdl.android.common.db.StoreMaster;
 import com.netsdl.android.main.R;
+import com.netsdl.android.main.view.MainActivity.Status;
 
-public class Login {
+public class Login implements Serializable{
+	private static final long serialVersionUID = 2809898507952018345L;
 	public static final int LAYOUT_COMMON33 = R.layout.common33;
 	final LayoutInflater inflater;
 	final View view;
@@ -75,6 +79,8 @@ public class Login {
 	}
 
 	public void init() {
+
+		parent.status = MainActivity.Status.Login;
 
 		parent.setContentView(view);
 		coreLayout.removeAllViews();

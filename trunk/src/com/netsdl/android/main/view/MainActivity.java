@@ -1,5 +1,6 @@
 package com.netsdl.android.main.view;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -52,18 +53,19 @@ public class MainActivity extends Activity {
 
 	public Type type = null;
 
-	public DeviceItem deviceItem;
+	public DeviceItem deviceItem = null;
 
 	public Main main = null;
 
-	public MainActivity() {
+	public Status status = null;
 
+	public MainActivity() {
 		mapDialogable = new HashMap<Integer, Dialogable>();
 		mapStoreMaster = new HashMap<Integer, Object[]>();
 		mapSkuMaster = new HashMap<Integer, Object[]>();
 		mapPaymentMaster = new HashMap<Integer, Object[]>();
 		mapItem = new HashMap<Integer, Item>();
-		//mapPay = new HashMap<Integer, BigDecimal>();
+		// mapPay = new HashMap<Integer, BigDecimal>();
 		mapPay = new TreeMap<Integer, BigDecimal>(new Comparator<Integer>() {
 			public int compare(Integer lhs, Integer rhs) {
 				try {
@@ -93,6 +95,8 @@ public class MainActivity extends Activity {
 			}
 		});
 
+		status = Status.Login;
+
 		// posTable = new PosTable(this);
 
 	}
@@ -101,15 +105,64 @@ public class MainActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (savedInstanceState != null
+				&& savedInstanceState.containsKey("status"))
+			status = (Status) savedInstanceState.getSerializable("status");
+		if (savedInstanceState != null
+				&& savedInstanceState.containsKey("login"))
+			login = (Login) savedInstanceState.getSerializable("login");
+		else
+			login = new Login(this);
 
-		login = new Login(this);
-		function = new Function(this);
-		preMain = new PreMain(this);
-		type = Structs.Type.type1;
-		deviceItem = new Structs().new DeviceItem();
-		main = new Main(this);
+		if (savedInstanceState != null
+				&& savedInstanceState.containsKey("function"))
+			function = (Function) savedInstanceState
+					.getSerializable("function");
+		else
+			function = new Function(this);
 
-		login.init();
+		if (savedInstanceState != null
+				&& savedInstanceState.containsKey("preMain"))
+			preMain = (PreMain) savedInstanceState.getSerializable("preMain");
+		else
+			preMain = new PreMain(this);
+
+		if (savedInstanceState != null
+				&& savedInstanceState.containsKey("main"))
+			main = (Main) savedInstanceState.getSerializable("main");
+		else
+			main = new Main(this);
+
+		if (savedInstanceState != null
+				&& savedInstanceState.containsKey("type"))
+			type = (Type) savedInstanceState.getSerializable("type");
+		else
+			type = Structs.Type.type1;
+
+		if (savedInstanceState != null
+				&& savedInstanceState.containsKey("deviceItem"))
+			deviceItem = (DeviceItem) savedInstanceState
+					.getSerializable("deviceItem");
+		else
+			deviceItem = new Structs().new DeviceItem();
+
+		switch (status) {
+		case Login:
+			login.init();
+			break;
+		case Function:
+			function.init();
+			break;
+		case PreMain:
+			preMain.init();
+			break;
+		case Main:
+			main.init();
+			break;
+		default:
+			login.init();
+
+		}
 
 	}
 
@@ -128,6 +181,29 @@ public class MainActivity extends Activity {
 		} else {
 			((Dialogable) mapDialogable.get(id)).onPrepareDialog(id, dialog);
 		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putSerializable("status", status);
+		outState.putSerializable("login", login);
+		outState.putSerializable("function", function);
+		outState.putSerializable("preMain", preMain);
+		outState.putSerializable("main", main);
+		outState.putSerializable("type", type);
+		outState.putSerializable("deviceItem", deviceItem);
+
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+		super.onRestoreInstanceState(savedInstanceState);
+	}
+
+	public enum Status {
+		Login, Function, PreMain, Main
 	}
 
 }
