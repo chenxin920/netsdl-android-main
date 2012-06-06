@@ -1,6 +1,7 @@
 package com.netsdl.android.main.view;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -45,7 +46,8 @@ import com.netsdl.android.main.R;
 import com.netsdl.android.main.view.list.ItemList;
 import com.netsdl.android.main.view.list.PayList;
 
-public class Main {
+public class Main implements Serializable{
+	private static final long serialVersionUID = 2657460901672317374L;
 	public final LayoutInflater inflater;
 	public static final int LAYOUT_MAIN = R.layout.main;
 	public MainActivity parent;
@@ -90,6 +92,8 @@ public class Main {
 	}
 
 	public void init() {
+		
+		parent.status = MainActivity.Status.Main;
 
 		parent.setContentView(view);
 		// parent.setContentView(LAYOUT_MAIN);
