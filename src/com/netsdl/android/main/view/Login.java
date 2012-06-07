@@ -12,26 +12,25 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.netsdl.android.common.Structs;
+import com.netsdl.android.common.Structs.LoginViewData;
 import com.netsdl.android.common.Util;
 import com.netsdl.android.common.db.DatabaseHelper;
 import com.netsdl.android.common.db.StoreMaster;
 import com.netsdl.android.main.R;
-import com.netsdl.android.main.view.MainActivity.Status;
 
-public class Login implements Serializable{
-	private static final long serialVersionUID = 2809898507952018345L;
+public class Login {
 	public static final int LAYOUT_COMMON33 = R.layout.common33;
 	final LayoutInflater inflater;
 	final View view;
 	final LinearLayout linearLayoutLogin;
 	final FrameLayout coreLayout;
 	MainActivity parent;
-	Status status;
-	Object[] storeObjs;
+	public LoginViewData data;
 
 	public Login(MainActivity parent) {
 		this.parent = parent;
-		status = Status.operaterID;
+		data = new Structs().new LoginViewData();
 
 		inflater = LayoutInflater.from(parent);
 		view = inflater.inflate(LAYOUT_COMMON33, null);
@@ -88,6 +87,8 @@ public class Login implements Serializable{
 
 		final EditText editText = (EditText) parent.findViewById(R.id.editText);
 
+		editText.setText(data.text);
+
 		int[] buttons = new int[] { R.id.button0, R.id.button1, R.id.button2,
 				R.id.button3, R.id.button4, R.id.button5, R.id.button6,
 				R.id.button7, R.id.button8, R.id.button9 };
@@ -97,8 +98,9 @@ public class Login implements Serializable{
 
 			button.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					editText.setText(editText.getText().toString()
-							+ Integer.parseInt(button.getText().toString()));
+					data.text = editText.getText().toString()
+							+ Integer.parseInt(button.getText().toString());
+					editText.setText(data.text);
 				}
 			});
 		}
@@ -108,9 +110,9 @@ public class Login implements Serializable{
 		buttonBack.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				if (editText.getText().length() <= 0) {
-					if (status == Status.operaterID)
+					if (data.status == Status.operaterID)
 						return;
-					status = Status.operaterID;
+					data.status = Status.operaterID;
 					((TextView) parent.findViewById(R.id.status))
 							.setText(R.string.username);
 					((TextView) parent.findViewById(R.id.textViewUsername))
@@ -119,9 +121,11 @@ public class Login implements Serializable{
 							.setText("");
 
 				} else {
-					editText.setText(editText.getText().delete(
-							editText.getText().length() - 1,
-							editText.getText().length()));
+					data.text = editText
+							.getText()
+							.delete(editText.getText().length() - 1,
+									editText.getText().length()).toString();
+					editText.setText(data.text);
 				}
 			}
 		});
@@ -132,7 +136,8 @@ public class Login implements Serializable{
 			public void onClick(View v) {
 				if (editText.getText().length() <= 0)
 					return;
-				editText.setText("");
+				data.text = "";
+				editText.setText(data.text);
 			}
 		});
 
@@ -140,13 +145,13 @@ public class Login implements Serializable{
 				.findViewById(R.id.buttonReturn);
 		buttonReturn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				if (status == Status.operaterID) {
+				if (data.status == Status.operaterID) {
 					try {
 						int iTemp = Integer.parseInt(editText.getText()
 								.toString());
 
 						try {
-							storeObjs = DatabaseHelper.getSingleColumn(
+							data.storeObjs = DatabaseHelper.getSingleColumn(
 									parent.getContentResolver(),
 									new Object[] { iTemp }, StoreMaster.class);
 						} catch (IllegalArgumentException e1) {
@@ -155,17 +160,18 @@ public class Login implements Serializable{
 						} catch (NoSuchFieldException e1) {
 						}
 
-						if (storeObjs == null) {
-
+						if (data.storeObjs == null) {
 							Toast.makeText(parent, R.string.msg_no_id,
 									Toast.LENGTH_SHORT).show();
-							editText.setText("");
+							data.text = "";
+							editText.setText(data.text);
+
 						} else {
 
-							status = Status.password;
+							data.status = Status.password;
 
 							String name = (String) DatabaseHelper
-									.getColumnValue(storeObjs,
+									.getColumnValue(data.storeObjs,
 											StoreMaster.COLUMN_NAME,
 											StoreMaster.COLUMNS);
 
@@ -180,7 +186,8 @@ public class Login implements Serializable{
 							((TextView) parent.findViewById(R.id.status))
 									.setText(R.string.password);
 
-							editText.setText("");
+							data.text = "";
+							editText.setText(data.text);
 							editText.setTransformationMethod(new PasswordTransformationMethod());
 
 						}
@@ -188,7 +195,8 @@ public class Login implements Serializable{
 					} catch (NumberFormatException nfe) {
 						Toast.makeText(parent, R.string.msg_id_must_be_number,
 								Toast.LENGTH_SHORT).show();
-						editText.setText("");
+						data.text = "";
+						editText.setText(data.text);
 					}
 
 				} else {
@@ -196,7 +204,7 @@ public class Login implements Serializable{
 						String str1 = Util
 								.getMD5(editText.getText().toString());
 						String str2 = (String) DatabaseHelper.getColumnValue(
-								storeObjs, StoreMaster.COLUMN_MD5,
+								data.storeObjs, StoreMaster.COLUMN_MD5,
 								StoreMaster.COLUMNS);
 						if (str1.equals(str2)) {
 							// parent.main.init();
@@ -205,7 +213,9 @@ public class Login implements Serializable{
 						} else {
 							Toast.makeText(parent, R.string.msg_password_wrong,
 									Toast.LENGTH_SHORT).show();
-							editText.setText("");
+							data.text = "";
+							editText.setText(data.text);
+
 						}
 
 					}
@@ -216,7 +226,7 @@ public class Login implements Serializable{
 
 	}
 
-	public enum Status {
+	public enum Status implements Serializable {
 		operaterID, password
 	}
 
