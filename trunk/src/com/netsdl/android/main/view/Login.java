@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.netsdl.android.common.Structs;
+import com.netsdl.android.common.Structs.LoginStatus;
 import com.netsdl.android.common.Structs.LoginViewData;
 import com.netsdl.android.common.Util;
 import com.netsdl.android.common.db.DatabaseHelper;
@@ -110,9 +111,9 @@ public class Login {
 		buttonBack.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				if (editText.getText().length() <= 0) {
-					if (data.status == Status.operaterID)
+					if (data.status == LoginStatus.operaterID)
 						return;
-					data.status = Status.operaterID;
+					data.status = LoginStatus.operaterID;
 					((TextView) parent.findViewById(R.id.status))
 							.setText(R.string.username);
 					((TextView) parent.findViewById(R.id.textViewUsername))
@@ -145,7 +146,7 @@ public class Login {
 				.findViewById(R.id.buttonReturn);
 		buttonReturn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				if (data.status == Status.operaterID) {
+				if (data.status == LoginStatus.operaterID) {
 					try {
 						int iTemp = Integer.parseInt(editText.getText()
 								.toString());
@@ -168,7 +169,7 @@ public class Login {
 
 						} else {
 
-							data.status = Status.password;
+							data.status = LoginStatus.password;
 
 							String name = (String) DatabaseHelper
 									.getColumnValue(data.storeObjs,
@@ -226,8 +227,5 @@ public class Login {
 
 	}
 
-	public enum Status implements Serializable {
-		operaterID, password
-	}
 
 }
