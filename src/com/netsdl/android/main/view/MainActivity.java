@@ -113,7 +113,12 @@ public class MainActivity extends Activity {
 		preMain = new PreMain(this);
 		main = new Main(this);
 
-		initDeviceItem();
+		if (savedInstanceState != null
+				&& savedInstanceState.containsKey("deviceItem"))
+			deviceItem = (DeviceItem) savedInstanceState
+					.getSerializable("deviceItem");
+		if (deviceItem == null)
+			initDeviceItem();
 
 		if (savedInstanceState != null
 				&& savedInstanceState.containsKey("status"))
@@ -126,13 +131,6 @@ public class MainActivity extends Activity {
 			type = (Type) savedInstanceState.getSerializable("type");
 		else
 			type = Structs.Type.type1;
-
-		if (savedInstanceState != null
-				&& savedInstanceState.containsKey("deviceItem"))
-			deviceItem = (DeviceItem) savedInstanceState
-					.getSerializable("deviceItem");
-		else
-			deviceItem = new Structs().new DeviceItem();
 
 		if (savedInstanceState != null
 				&& savedInstanceState.containsKey("login.data"))
@@ -178,10 +176,10 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		// outState.putSerializable("status", status);
+		outState.putSerializable("status", status);
 		// outState.putSerializable("type", type);
 		// outState.putSerializable("deviceItem", deviceItem);
-		// outState.putSerializable("login.data", login.data);
+		outState.putSerializable("login.data", login.data);
 
 		super.onSaveInstanceState(outState);
 	}
@@ -193,7 +191,8 @@ public class MainActivity extends Activity {
 	}
 
 	private void initDeviceItem() {
-
+		deviceItem = new Structs().new DeviceItem();
+		
 		String strDeviceId = Util.getLocalDeviceId(this);
 
 		try {
@@ -202,9 +201,10 @@ public class MainActivity extends Activity {
 					DeviceMaster.class);
 
 			if (deviceMasterObjs != null) {
-				deviceItem.intStart = Integer.parseInt((String) DatabaseHelper.getColumnValue(
-						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_01,
-						DeviceMaster.COLUMNS));
+				deviceItem.intStart = Integer.parseInt((String) DatabaseHelper
+						.getColumnValue(deviceMasterObjs,
+								DeviceMaster.COLUMN_FIELD_01,
+								DeviceMaster.COLUMNS));
 				deviceItem.printWSDL = (String) DatabaseHelper.getColumnValue(
 						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_20,
 						DeviceMaster.COLUMNS);

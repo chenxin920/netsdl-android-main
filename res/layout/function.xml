@@ -85,12 +85,32 @@
         android:layout_weight="1"
         android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/buttonFunction2"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:enabled="false"
-            android:text="@string/function2" />
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/buttonFunction2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:enabled="false"
+                android:text="@string/function2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/buttonBack"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="@string/Return" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

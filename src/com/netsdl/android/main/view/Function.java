@@ -1,5 +1,7 @@
 package com.netsdl.android.main.view;
 
+import com.netsdl.android.common.Structs;
+import com.netsdl.android.common.Structs.LoginViewData;
 import com.netsdl.android.common.Structs.Type;
 import com.netsdl.android.main.R;
 
@@ -46,6 +48,14 @@ public class Function{
 		setFunction();
 
 		initFunction();
+		
+		final Button buttonBack = (Button) parent.findViewById(R.id.buttonBack);
+		buttonBack.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				parent.login.data = new Structs().new LoginViewData();
+				parent.login.init();
+			}
+		});
 
 	}
 

@@ -1,7 +1,5 @@
 package com.netsdl.android.main.view;
 
-import java.io.Serializable;
-
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,6 +88,12 @@ public class Login {
 
 		editText.setText(data.text);
 
+		if (data.status == LoginStatus.operaterID) {
+			setOperaterID(editText);
+		} else {
+			editText.setTransformationMethod(new PasswordTransformationMethod());
+		}
+
 		int[] buttons = new int[] { R.id.button0, R.id.button1, R.id.button2,
 				R.id.button3, R.id.button4, R.id.button5, R.id.button6,
 				R.id.button7, R.id.button8, R.id.button9 };
@@ -114,13 +118,7 @@ public class Login {
 					if (data.status == LoginStatus.operaterID)
 						return;
 					data.status = LoginStatus.operaterID;
-					((TextView) parent.findViewById(R.id.status))
-							.setText(R.string.username);
-					((TextView) parent.findViewById(R.id.textViewUsername))
-							.setText("");
-					((TextView) parent.findViewById(R.id.textViewUsernameFixed))
-							.setText("");
-
+					setOperaterID(editText);
 				} else {
 					data.text = editText
 							.getText()
@@ -227,5 +225,14 @@ public class Login {
 
 	}
 
+	private void setOperaterID(EditText editText) {
+		((TextView) parent.findViewById(R.id.status))
+				.setText(R.string.username);
+		((TextView) parent.findViewById(R.id.textViewUsername)).setText("");
+		((TextView) parent.findViewById(R.id.textViewUsernameFixed))
+				.setText("");
+		editText.setTransformationMethod(null);
+
+	}
 
 }
