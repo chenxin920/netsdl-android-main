@@ -1,7 +1,6 @@
 package com.netsdl.android.main.view;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -46,8 +45,7 @@ import com.netsdl.android.main.R;
 import com.netsdl.android.main.view.list.ItemList;
 import com.netsdl.android.main.view.list.PayList;
 
-public class Main implements Serializable{
-	private static final long serialVersionUID = 2657460901672317374L;
+public class Main {
 	public final LayoutInflater inflater;
 	public static final int LAYOUT_MAIN = R.layout.main;
 	public MainActivity parent;
@@ -92,7 +90,7 @@ public class Main implements Serializable{
 	}
 
 	public void init() {
-		
+
 		parent.status = MainActivity.Status.Main;
 
 		parent.setContentView(view);
@@ -318,16 +316,24 @@ public class Main implements Serializable{
 					parent.mapSkuMaster.put(skuId, objs);
 				}
 				if (!parent.mapItem.containsKey(skuId)) {
-					Item item = new Structs().new Item();
-					item.count = 1;
+					if (parent.mapItem.size() <= 10) {
+						Item item = new Structs().new Item();
+						item.count = 1;
 
-					item.price = (BigDecimal) DatabaseHelper.getColumnValue(
-							objs, SkuMaster.COLUMN_ITEM_STD_PRICE,
-							SkuMaster.COLUMNS);
-					item.price.multiply(new BigDecimal(item.count));
-					item.lumpSum = item.price.multiply(new BigDecimal(
-							item.count));
-					parent.mapItem.put(skuId, item);
+						item.price = (BigDecimal) DatabaseHelper
+								.getColumnValue(objs,
+										SkuMaster.COLUMN_ITEM_STD_PRICE,
+										SkuMaster.COLUMNS);
+						item.price.multiply(new BigDecimal(item.count));
+						item.lumpSum = item.price.multiply(new BigDecimal(
+								item.count));
+						parent.mapItem.put(skuId, item);
+					} else {
+						Toast.makeText(parent, R.string.msg_item_over_10,
+								Toast.LENGTH_SHORT).show();
+						editSearch.setText("");
+					}
+
 				} else {
 					Item item = parent.mapItem.get(skuId);
 					item.count += 1;
@@ -441,7 +447,12 @@ public class Main implements Serializable{
 	private void closeThis() throws IllegalArgumentException,
 			SecurityException, IllegalAccessException, NoSuchFieldException,
 			IOException, XmlPullParserException {
+		// String strUUID = Util.getUUID();
 		String strUUID = Util.getUUID();
+
+//		Object[] objPos = DatabaseHelper.getSingleColumn(
+//				parent.getContentResolver(), PosTable.class);
+
 		Calendar now = Calendar.getInstance();
 		now.setTimeInMillis(System.currentTimeMillis());
 		String timestamp = sdf.format(now.getTime());

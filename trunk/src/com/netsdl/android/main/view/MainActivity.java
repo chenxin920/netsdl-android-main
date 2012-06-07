@@ -1,6 +1,5 @@
 package com.netsdl.android.main.view;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -8,11 +7,14 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.netsdl.android.common.Structs;
+import com.netsdl.android.common.Util;
 import com.netsdl.android.common.Structs.Item;
+import com.netsdl.android.common.Structs.LoginViewData;
 import com.netsdl.android.common.Structs.Type;
 import com.netsdl.android.common.Structs.DeviceItem;
 import com.netsdl.android.common.db.DatabaseHelper;
 import com.netsdl.android.common.db.DbMaster;
+import com.netsdl.android.common.db.DeviceMaster;
 import com.netsdl.android.common.db.PaymentMaster;
 import com.netsdl.android.common.db.PosTable;
 import com.netsdl.android.common.db.SkuMaster;
@@ -105,33 +107,19 @@ public class MainActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		login = new Login(this);
+		function = new Function(this);
+		preMain = new PreMain(this);
+		main = new Main(this);
+
+		initDeviceItem();
+
 		if (savedInstanceState != null
 				&& savedInstanceState.containsKey("status"))
 			status = (Status) savedInstanceState.getSerializable("status");
-		if (savedInstanceState != null
-				&& savedInstanceState.containsKey("login"))
-			login = (Login) savedInstanceState.getSerializable("login");
 		else
-			login = new Login(this);
-
-		if (savedInstanceState != null
-				&& savedInstanceState.containsKey("function"))
-			function = (Function) savedInstanceState
-					.getSerializable("function");
-		else
-			function = new Function(this);
-
-		if (savedInstanceState != null
-				&& savedInstanceState.containsKey("preMain"))
-			preMain = (PreMain) savedInstanceState.getSerializable("preMain");
-		else
-			preMain = new PreMain(this);
-
-		if (savedInstanceState != null
-				&& savedInstanceState.containsKey("main"))
-			main = (Main) savedInstanceState.getSerializable("main");
-		else
-			main = new Main(this);
+			status = Status.Login;
 
 		if (savedInstanceState != null
 				&& savedInstanceState.containsKey("type"))
@@ -145,6 +133,11 @@ public class MainActivity extends Activity {
 					.getSerializable("deviceItem");
 		else
 			deviceItem = new Structs().new DeviceItem();
+
+		if (savedInstanceState != null
+				&& savedInstanceState.containsKey("login.data"))
+			login.data = (LoginViewData) savedInstanceState
+					.getSerializable("login.data");
 
 		switch (status) {
 		case Login:
@@ -185,13 +178,10 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putSerializable("status", status);
-		outState.putSerializable("login", login);
-		outState.putSerializable("function", function);
-		outState.putSerializable("preMain", preMain);
-		outState.putSerializable("main", main);
-		outState.putSerializable("type", type);
-		outState.putSerializable("deviceItem", deviceItem);
+		// outState.putSerializable("status", status);
+		// outState.putSerializable("type", type);
+		// outState.putSerializable("deviceItem", deviceItem);
+		// outState.putSerializable("login.data", login.data);
 
 		super.onSaveInstanceState(outState);
 	}
@@ -200,6 +190,42 @@ public class MainActivity extends Activity {
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 
 		super.onRestoreInstanceState(savedInstanceState);
+	}
+
+	private void initDeviceItem() {
+
+		String strDeviceId = Util.getLocalDeviceId(this);
+
+		try {
+			Object[] deviceMasterObjs = DatabaseHelper.getSingleColumn(
+					getContentResolver(), new Object[] { "9", strDeviceId },
+					DeviceMaster.class);
+
+			if (deviceMasterObjs != null) {
+				deviceItem.intStart = Integer.parseInt((String) DatabaseHelper.getColumnValue(
+						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_01,
+						DeviceMaster.COLUMNS));
+				deviceItem.printWSDL = (String) DatabaseHelper.getColumnValue(
+						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_20,
+						DeviceMaster.COLUMNS);
+				deviceItem.printNameSpace = (String) DatabaseHelper
+						.getColumnValue(deviceMasterObjs,
+								DeviceMaster.COLUMN_FIELD_19,
+								DeviceMaster.COLUMNS);
+				deviceItem.printMethod = (String) DatabaseHelper
+						.getColumnValue(deviceMasterObjs,
+								DeviceMaster.COLUMN_FIELD_18,
+								DeviceMaster.COLUMNS);
+				deviceItem.printFlag = (String) DatabaseHelper.getColumnValue(
+						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_17,
+						DeviceMaster.COLUMNS);
+			}
+
+		} catch (IllegalArgumentException e) {
+		} catch (SecurityException e) {
+		} catch (IllegalAccessException e) {
+		} catch (NoSuchFieldException e) {
+		}
 	}
 
 	public enum Status {

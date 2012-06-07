@@ -102,10 +102,8 @@ public class ItemList {
 				holder = new ViewHolder();
 
 				convertView = mInflater.inflate(R.layout.item, null);
-				holder.itemCatName = (TextView) convertView
-						.findViewById(R.id.itemCatName);
-				holder.skuPropName = (TextView) convertView
-						.findViewById(R.id.skuPropName);
+				holder.prop1 = (TextView) convertView.findViewById(R.id.prop1);
+				holder.prop2 = (TextView) convertView.findViewById(R.id.prop2);
 				holder.price = (TextView) convertView.findViewById(R.id.price);
 				holder.count = (TextView) convertView.findViewById(R.id.count);
 				holder.lumpSum = (TextView) convertView
@@ -124,16 +122,11 @@ public class ItemList {
 					new Integer[] {});
 			Object[] objs = grandpa.mapSkuMaster.get(skuIDs[position]);
 
-			holder.itemCatName.setText((String) objs[DatabaseHelper
-					.getColumnIndex(SkuMaster.COLUMN_ITEM_CAT_NAME,
-							SkuMaster.COLUMNS)]);
+			holder.prop1.setText((String) objs[DatabaseHelper.getColumnIndex(
+					SkuMaster.COLUMN_SKU_CD, SkuMaster.COLUMNS)]);
 
-			holder.skuPropName.setText((String) objs[DatabaseHelper
-					.getColumnIndex(SkuMaster.COLUMN_SKU_PROP_1_NAME,
-							SkuMaster.COLUMNS)]
-					+ (String) objs[DatabaseHelper
-							.getColumnIndex(SkuMaster.COLUMN_SKU_PROP_2_NAME,
-									SkuMaster.COLUMNS)]);
+			holder.prop2.setText((String) objs[DatabaseHelper.getColumnIndex(
+					SkuMaster.COLUMN_ITEM_CAT_NAME, SkuMaster.COLUMNS)]);
 
 			holder.price.setText(grandpa.mapItem.get(skuIDs[position]).price
 					.toString());
@@ -187,8 +180,8 @@ public class ItemList {
 	}
 
 	public final class ViewHolder {
-		public TextView itemCatName;
-		public TextView skuPropName;
+		public TextView prop1;
+		public TextView prop2;
 		public TextView price;
 		public TextView count;
 		public TextView lumpSum;
