@@ -450,8 +450,8 @@ public class Main {
 		// String strUUID = Util.getUUID();
 		String strUUID = Util.getUUID();
 
-//		Object[] objPos = DatabaseHelper.getSingleColumn(
-//				parent.getContentResolver(), PosTable.class);
+		// Object[] objPos = DatabaseHelper.getSingleColumn(
+		// parent.getContentResolver(), PosTable.class);
 
 		Calendar now = Calendar.getInstance();
 		now.setTimeInMillis(System.currentTimeMillis());
@@ -541,7 +541,8 @@ public class Main {
 		DatabaseHelper
 				.insert(parent.getContentResolver(), strs, PosTable.class);
 
-		printThis(strUUID, timestamp, sbItems.toString(), sbPays.toString());
+		if (Boolean.valueOf(parent.deviceItem.printFlagIn))
+			printThis(strUUID, timestamp, sbItems.toString(), sbPays.toString());
 
 	}
 
@@ -575,7 +576,7 @@ public class Main {
 		rpc.addProperty("pays", pays);
 		rpc.addProperty("remarks", parent.deviceItem.remarks);
 		rpc.addProperty("isPrintOut",
-				Boolean.valueOf(parent.deviceItem.printFlag));
+				Boolean.valueOf(parent.deviceItem.printFlagOut));
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER12);
 

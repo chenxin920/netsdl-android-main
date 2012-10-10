@@ -270,7 +270,7 @@ public class PreMain {
 		}
 
 	}
-	
+
 	private void initType2() {
 
 		linearLayoutType = (LinearLayout) inflater
@@ -376,7 +376,7 @@ public class PreMain {
 		}
 	}
 
-	private void initType3(){
+	private void initType3() {
 
 		linearLayoutType = (LinearLayout) inflater
 				.inflate(R.layout.type3, null);
@@ -479,9 +479,9 @@ public class PreMain {
 		} catch (IllegalAccessException e1) {
 		} catch (NoSuchFieldException e1) {
 		}
-	
+
 	}
-	
+
 	private void initPrinterIP() {
 		String strDeviceId = Util.getLocalDeviceId(parent);
 
@@ -503,10 +503,11 @@ public class PreMain {
 						.getColumnValue(deviceMasterObjs,
 								DeviceMaster.COLUMN_FIELD_18,
 								DeviceMaster.COLUMNS);
-				parent.deviceItem.printFlag = (String) DatabaseHelper
-						.getColumnValue(deviceMasterObjs,
-								DeviceMaster.COLUMN_FIELD_17,
-								DeviceMaster.COLUMNS);
+				String[] printFlags = ((String) DatabaseHelper.getColumnValue(
+						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_17,
+						DeviceMaster.COLUMNS)).split(":");
+				parent.deviceItem.printFlagIn = printFlags[0];
+				parent.deviceItem.printFlagOut = printFlags[1];
 			}
 
 		} catch (IllegalArgumentException e) {

@@ -192,7 +192,7 @@ public class MainActivity extends Activity {
 
 	private void initDeviceItem() {
 		deviceItem = new Structs().new DeviceItem();
-		
+
 		String strDeviceId = Util.getLocalDeviceId(this);
 
 		try {
@@ -216,9 +216,11 @@ public class MainActivity extends Activity {
 						.getColumnValue(deviceMasterObjs,
 								DeviceMaster.COLUMN_FIELD_18,
 								DeviceMaster.COLUMNS);
-				deviceItem.printFlag = (String) DatabaseHelper.getColumnValue(
+				String[] printFlags = ((String) DatabaseHelper.getColumnValue(
 						deviceMasterObjs, DeviceMaster.COLUMN_FIELD_17,
-						DeviceMaster.COLUMNS);
+						DeviceMaster.COLUMNS)).split(":");
+				deviceItem.printFlagIn = printFlags[0];
+				deviceItem.printFlagOut = printFlags[1];
 			}
 
 		} catch (IllegalArgumentException e) {

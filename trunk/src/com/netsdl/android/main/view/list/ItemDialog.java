@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.netsdl.android.common.Structs.Item;
 import com.netsdl.android.main.R;
 import com.netsdl.android.main.view.MainActivity;
+import com.netsdl.android.main.view.list.ItemList.ItemAdapter;
 import com.netsdl.android.common.view.dialog.Dialogable;
 
 public class ItemDialog implements Dialogable, Runnable {
@@ -28,6 +29,7 @@ public class ItemDialog implements Dialogable, Runnable {
 	public Item itemNew;
 	public int position;
 
+	View viewListItem;
 	View viewItemDialog;
 
 	boolean isRun = true;
@@ -44,8 +46,10 @@ public class ItemDialog implements Dialogable, Runnable {
 
 	int intButtonPriceMargin = 1;
 
-	public ItemDialog(MainActivity netSDLActivity, Item itemOld, int position) {
+	public ItemDialog(MainActivity netSDLActivity, View viewListItem,
+			Item itemOld, int position) {
 		this.netSDLActivity = netSDLActivity;
+		this.viewListItem = viewListItem;
 		this.itemOld = itemOld;
 		try {
 			itemNew = (Item) itemOld.clone();
@@ -105,9 +109,19 @@ public class ItemDialog implements Dialogable, Runnable {
 				netSDLActivity.mapItem.put(skuIDs[position], itemNew);
 				netSDLActivity.dismissDialog(id);
 
-				netSDLActivity.main.listViewNotifyDataSetChanged(R.id.listViewItem);
+				netSDLActivity.main
+						.listViewNotifyDataSetChanged(R.id.listViewItem);
 				netSDLActivity.main.setTotal();
 
+			}
+		});
+
+		builder.setNeutralButton("Delete", new OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				Button buttonDelete = (Button) viewListItem
+						.findViewById(R.id.buttonDelete);
+				buttonDelete.setVisibility(View.VISIBLE);
+				netSDLActivity.dismissDialog(id);
 			}
 		});
 

@@ -1,18 +1,12 @@
 package com.netsdl.android.main.view.list;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.util.Log;
-import android.view.Display;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
@@ -21,7 +15,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.netsdl.android.common.db.DatabaseHelper;
-import com.netsdl.android.common.db.PaymentMaster;
 import com.netsdl.android.common.db.SkuMaster;
 import com.netsdl.android.common.view.list.Currentable;
 import com.netsdl.android.main.R;
@@ -45,7 +38,9 @@ public class ItemList {
 		adapter = new ItemAdapter(grandpa);
 		listView.setAdapter(adapter);
 
-		gestureDetector = new GestureDetector(new ListViewGestureListener(
+		gestureDetector = new GestureDetector(grandpa,
+				new ListViewGestureListener(adapter));
+		gestureDetector.setOnDoubleTapListener(new ListViewGestureListener(
 				adapter));
 
 		listView.setOnTouchListener(new OnTouchListener() {
@@ -55,17 +50,15 @@ public class ItemList {
 		});
 
 		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-
 			public boolean onItemLongClick(AdapterView<?> adapterView,
 					View view, int position, long id) {
-				// showItemDialog(position);
 				Integer[] skuIDs = grandpa.mapItem.keySet().toArray(
 						new Integer[] {});
-				ItemDialog itemDialog = new ItemDialog(grandpa, grandpa.mapItem
-						.get(skuIDs[position]), position);
+				ItemDialog itemDialog = new ItemDialog(grandpa, adapter
+						.getView(), grandpa.mapItem.get(skuIDs[position]),
+						position);
 				grandpa.mapDialogable.put(itemDialog.hashCode(), itemDialog);
 				grandpa.showDialog(itemDialog.hashCode());
-
 				return false;
 			}
 		});
