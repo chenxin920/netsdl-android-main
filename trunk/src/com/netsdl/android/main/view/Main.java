@@ -16,8 +16,13 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,6 +91,26 @@ public class Main {
 		buttonPay = (Button) view.findViewById(R.id.buttonPay);
 		buttonConfirm = (Button) view.findViewById(R.id.buttonConfirm);
 		buttonReturn = (Button) view.findViewById(R.id.buttonReturn);
+
+//		Display dd = parent.getWindowManager().getDefaultDisplay();
+//		DisplayMetrics dm = new DisplayMetrics();
+//		dd.getMetrics(dm);
+//		float m_ScaledDensity = dm.scaledDensity;
+//		//String sample = buttonReturn.getText().toString();
+//		String sample = "NeedsToFIt";
+//		Rect bounds = new Rect();
+//		Paint p = new Paint();
+//		p.setTypeface(buttonReturn.getTypeface());
+//		int maxFont;
+//		for (maxFont = 1; -bounds.top <= buttonReturn.getHeight()
+//				&& bounds.right <= buttonReturn.getWidth(); maxFont++) {
+//			p.setTextSize(maxFont);
+//			p.getTextBounds(sample, 0, sample.length(), bounds);
+//		}
+//		maxFont = (int) ((maxFont - 1) / m_ScaledDensity);
+//		buttonReturn.setTextSize(maxFont);
+//		Log.d("maxFont", maxFont+"");
+//		System.out.println(maxFont);
 
 	}
 

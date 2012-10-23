@@ -28,7 +28,7 @@
                     android:layout_height="fill_parent"
                     android:text="@string/Price"
                     android:textColor="#FFFFFF"
-                    android:textSize="10pt" />
+                     />
             </LinearLayout>
 
             <LinearLayout

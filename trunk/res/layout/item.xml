@@ -20,16 +20,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:textColor="#FF0000FF"
-                android:textSize="10pt" />
+                android:textColor="@drawable/blue"
+                android:textSize="10dp" />
 
             <TextView
                 android:id="@+id/prop2"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:textColor="#FF00FF00" />
-
+                android:textColor="@drawable/blue"
+                android:textSize="10dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -43,6 +43,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:text="1"
                 android:textColor="#000000" />
 
@@ -51,6 +52,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:text="1"
                 android:textColor="#000000" />
 
@@ -60,8 +62,9 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:text="1"
-                android:textColor="#000000"
-                android:textSize="10pt" />
+                android:textColor="@drawable/black"
+                android:textSize="15dp"
+                />
         </LinearLayout>
     </LinearLayout>
 

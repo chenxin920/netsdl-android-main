@@ -25,6 +25,8 @@
     <string name="Price">单价</string>
     <string name="Quantity">数量</string>
     <string name="lumpSum">合计</string>
+    <string name="lumpSum1">应收合计</string>
+    <string name="lumpSum2">已付合计</string>
     <string name="Payment">Payment</string>
     <string name="CheckOut">Check Out</string>
     <string name="Pay">小计</string>

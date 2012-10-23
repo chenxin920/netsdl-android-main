@@ -31,7 +31,7 @@ import android.widget.Spinner;
 
 public class PreMain {
 
-	public static final int LAYOUT_COMMON33 = R.layout.common33;
+	public static final int LAYOUT_COMMON33a = R.layout.common33a;
 	final View view;
 	final LayoutInflater inflater;
 	LinearLayout linearLayoutType;
@@ -44,7 +44,7 @@ public class PreMain {
 	public PreMain(MainActivity parent) {
 		this.parent = parent;
 		inflater = LayoutInflater.from(parent);
-		view = inflater.inflate(LAYOUT_COMMON33, null);
+		view = inflater.inflate(LAYOUT_COMMON33a, null);
 
 		coreLayout = (FrameLayout) view.findViewById(R.id.core);
 
