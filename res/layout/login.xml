@@ -27,14 +27,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/blank" />
+                    android:text="@string/blank"
+                    android:textColor="@drawable/white" />
 
                 <TextView
                     android:id="@+id/textViewUsername"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/blank" />
+                    android:text="@string/blank"
+                    android:textColor="@drawable/deep_yellow" />
             </LinearLayout>
 
             <LinearLayout
@@ -47,7 +49,8 @@
                     android:id="@+id/status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/operaterID" />
+                    android:text="@string/operaterID"
+                    android:textColor="@drawable/white" />
             </LinearLayout>
         </LinearLayout>
 
@@ -63,7 +66,7 @@
             android:singleLine="true" >
         </EditText>
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -98,7 +101,7 @@
             android:layout_weight="1"
             android:text="@string/back" />
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -133,7 +136,7 @@
             android:layout_weight="1"
             android:text="@string/clear" />
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

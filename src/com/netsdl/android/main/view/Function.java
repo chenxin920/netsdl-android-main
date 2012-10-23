@@ -14,7 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 public class Function{
-	public static final int LAYOUT_COMMON33a = R.layout.common33a;
+	public static final int LAYOUT_COMMON33 = R.layout.common33;
 	final View view;
 	final LayoutInflater inflater;
 	final LinearLayout linearLayoutType;
@@ -30,7 +30,7 @@ public class Function{
 	public Function(MainActivity parent) {
 		this.parent = parent;
 		inflater = LayoutInflater.from(parent);
-		view = inflater.inflate(LAYOUT_COMMON33a, null);
+		view = inflater.inflate(LAYOUT_COMMON33, null);
 
 		linearLayoutType = (LinearLayout) inflater.inflate(R.layout.function,
 				null);
@@ -65,7 +65,7 @@ public class Function{
 					.setBackgroundColor(Color.TRANSPARENT);
 		}
 		((Button) parent.findViewById(currentID))
-				.setBackgroundColor(Color.CYAN);
+				.setBackgroundColor(Color.LTGRAY);
 
 		parent.type = types[getIndex(currentID)];
 
