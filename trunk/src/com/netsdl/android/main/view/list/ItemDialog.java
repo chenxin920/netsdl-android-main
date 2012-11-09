@@ -200,7 +200,7 @@ public class ItemDialog implements Dialogable, Runnable {
 		int intFlg = 1;
 		while (isRun) {
 			try {
-				Thread.sleep(50);
+				Thread.sleep(150);
 
 				if (isButtonPriceIncreaseDown) {
 					itemNew.price = itemNew.price.add(new BigDecimal(
