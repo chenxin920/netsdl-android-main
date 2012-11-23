@@ -43,6 +43,9 @@ public class ItemDialog implements Dialogable, Runnable {
 
 	public boolean isButtonLumpSumIncreaseDown = false;
 	public boolean isButtonLumpSumDecreaseDown = false;
+	//折扣
+	public boolean isButtonItemDiscountIncreaseDown = false;
+	public boolean isButtonItemDiscountDecreaseDown = false;
 
 	int intButtonPriceMargin = 1;
 
@@ -77,7 +80,7 @@ public class ItemDialog implements Dialogable, Runnable {
 				netSDLActivity);
 
 		builder.setCancelable(true);
-		builder.setTitle(R.string.item_change);
+		//builder.setTitle(R.string.item_change);
 		builder.setView(viewItemDialog);
 
 		showItem(viewItemDialog);
@@ -99,7 +102,15 @@ public class ItemDialog implements Dialogable, Runnable {
 
 		setOnTouchListener(R.id.buttonLumpSumDecrease,
 				"isButtonLumpSumDecreaseDown");
+		
+		//折扣
+		setOnTouchListener(R.id.buttonItemDiscountDecrease,
+				"isButtonItemDiscountDecreaseDown");
+		
+		setOnTouchListener(R.id.buttonItemDiscountIncrease,
+				"isButtonItemDiscountIncreaseDown");
 
+		//明细修改确认
 		builder.setPositiveButton(R.string.Confirm, new OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 
@@ -194,6 +205,9 @@ public class ItemDialog implements Dialogable, Runnable {
 				.toString());
 		((TextView) (view.findViewById(R.id.lumpSum))).setText(itemNew.lumpSum
 				.toString());
+		//折扣
+		((TextView) (view.findViewById(R.id.ItemDiscount))).setText(itemNew.itemDiscount
+				.toString());
 	}
 
 	public void run() {
@@ -205,24 +219,24 @@ public class ItemDialog implements Dialogable, Runnable {
 				if (isButtonPriceIncreaseDown) {
 					itemNew.price = itemNew.price.add(new BigDecimal(
 							intButtonPriceMargin));
-					itemNew.lumpSum = itemNew.price.multiply(new BigDecimal(
-							itemNew.count));
+					countSum();
 
 				} else if (isButtonPriceDecreaseDown) {
 					itemNew.price = itemNew.price.subtract(new BigDecimal(
 							intButtonPriceMargin));
-					itemNew.lumpSum = itemNew.price.multiply(new BigDecimal(
-							itemNew.count));
+					if(itemNew.price.doubleValue()<0)
+						itemNew.price = new BigDecimal(0);
+					countSum();
 
 				} else if (isButtonCountIncreaseDown) {
 					itemNew.count += intButtonPriceMargin;
-					itemNew.lumpSum = itemNew.price.multiply(new BigDecimal(
-							itemNew.count));
+					countSum();
 
 				} else if (isButtonCountDecreaseDown) {
 					itemNew.count -= intButtonPriceMargin;
-					itemNew.lumpSum = itemNew.price.multiply(new BigDecimal(
-							itemNew.count));
+					if(itemNew.count<0)
+						itemNew.count = new Integer(0);
+					countSum();
 
 				} else if (isButtonLumpSumIncreaseDown) {
 					itemNew.lumpSum = itemNew.lumpSum.add(new BigDecimal(
@@ -231,6 +245,20 @@ public class ItemDialog implements Dialogable, Runnable {
 				} else if (isButtonLumpSumDecreaseDown) {
 					itemNew.lumpSum = itemNew.lumpSum.subtract(new BigDecimal(
 							intButtonPriceMargin));
+
+				}
+				//折扣
+				else if (isButtonItemDiscountIncreaseDown) {
+					itemNew.itemDiscount +=intButtonPriceMargin;
+					if(itemNew.itemDiscount>100)
+						itemNew.itemDiscount = 100;
+					countSum();
+
+				} else if (isButtonItemDiscountDecreaseDown) {
+					itemNew.itemDiscount -=intButtonPriceMargin;
+					if(itemNew.itemDiscount<0)
+						itemNew.itemDiscount = 0;
+					countSum();
 
 				} else {
 					intFlg = 1;
@@ -241,7 +269,9 @@ public class ItemDialog implements Dialogable, Runnable {
 						|| isButtonCountIncreaseDown
 						|| isButtonCountDecreaseDown
 						|| isButtonLumpSumIncreaseDown
-						|| isButtonLumpSumDecreaseDown) {
+						|| isButtonLumpSumDecreaseDown
+						|| isButtonItemDiscountIncreaseDown
+						|| isButtonItemDiscountDecreaseDown) {
 					intFlg++;
 					if (intFlg > 10) {
 						intFlg = 1;
@@ -262,5 +292,11 @@ public class ItemDialog implements Dialogable, Runnable {
 
 		}
 
+	}
+
+	private void countSum() {
+		itemNew.lumpSum = itemNew.price.multiply(new BigDecimal(
+				itemNew.itemDiscount).divide(new BigDecimal(100),2, BigDecimal.ROUND_HALF_UP)).multiply(new BigDecimal(
+						itemNew.count));
 	}
 }

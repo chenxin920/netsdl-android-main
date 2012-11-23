@@ -218,6 +218,21 @@ public class Main {
 					editSearch.setText("");
 
 				} else {
+					//判断是否有商品
+					if(parent.mapItem.size()==0)
+					{
+						Toast.makeText(parent, R.string.pay_msg1,
+								Toast.LENGTH_LONG).show();
+						return;
+					}
+					//判断支付是否完成
+					if(getTotalItemStdPrice().subtract(
+							getTotalPay()).doubleValue()>0)
+					{
+						Toast.makeText(parent, R.string.pay_msg2,
+								Toast.LENGTH_LONG).show();
+						return;
+					}
 					boolean isPrintOK = true;
 					try {
 						closeThis();
@@ -347,7 +362,7 @@ public class Main {
 
 						item.price = (BigDecimal) DatabaseHelper
 								.getColumnValue(objs,
-										SkuMaster.COLUMN_ITEM_STD_PRICE,
+										SkuMaster.COLUMN_ITEM_PRICE,
 										SkuMaster.COLUMNS);
 						item.price.multiply(new BigDecimal(item.count));
 						item.lumpSum = item.price.multiply(new BigDecimal(
@@ -364,7 +379,7 @@ public class Main {
 					item.count += 1;
 
 					item.price = (BigDecimal) DatabaseHelper.getColumnValue(
-							objs, SkuMaster.COLUMN_ITEM_STD_PRICE,
+							objs, SkuMaster.COLUMN_ITEM_PRICE,
 							SkuMaster.COLUMNS);
 					item.lumpSum = item.price.multiply(new BigDecimal(
 							item.count));
@@ -409,7 +424,9 @@ public class Main {
 
 	}
 
+	//支付button初始化
 	private void initLinearLayoutPayMethod() {
+		//最多8个button
 		int[] buttonPays = new int[] { R.id.buttonPay1, R.id.buttonPay2,
 				R.id.buttonPay3, R.id.buttonPay4, R.id.buttonPay5,
 				R.id.buttonPay6, R.id.buttonPay7, R.id.buttonPay8 };
@@ -469,6 +486,7 @@ public class Main {
 
 	}
 
+	//结单处理
 	private void closeThis() throws IllegalArgumentException,
 			SecurityException, IllegalAccessException, NoSuchFieldException,
 			IOException, XmlPullParserException {
@@ -654,6 +672,9 @@ public class Main {
 
 		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_P_AMT,
 				PosTable.COLUMNS)] = item.lumpSum.toString();
+		//日结标记
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_END_DAY,
+				PosTable.COLUMNS)] = "0";
 
 		return strs;
 
@@ -690,6 +711,9 @@ public class Main {
 
 		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_P_AMT,
 				PosTable.COLUMNS)] = count.toString();
+		//日结标记
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_END_DAY,
+				PosTable.COLUMNS)] = "0";
 
 		return strs;
 
@@ -705,7 +729,7 @@ public class Main {
 				parent.deviceItem.custom[1], parent.deviceItem.operator[0],
 				parent.deviceItem.operator[1],
 				isItem ? Constant.ORDER_FLAG_SKU : Constant.ORDER_FLAG_PAY, "",
-				"", "", "", "", "", "", "" };
+				"", "", "", "", "", "", "","0" };
 		return strs;
 	}
 

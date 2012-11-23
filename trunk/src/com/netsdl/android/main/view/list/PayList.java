@@ -9,6 +9,7 @@ import com.netsdl.android.main.view.MainActivity;
 
 import android.content.Context;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -80,6 +81,8 @@ public class PayList {
 				holder.fee = (TextView) convertView.findViewById(R.id.fee);
 				holder.buttonDelete = (Button) convertView
 						.findViewById(R.id.buttonDelete);
+				holder.fee.setTextColor(holder.payMethodName.getTextColors().getDefaultColor());
+				holder.fee.setGravity(Gravity.CENTER);
 				convertView.setTag(holder);
 
 			} else {
