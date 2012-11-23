@@ -69,6 +69,9 @@
     <string name="OutOfType">移出类型</string>
     <string name="SalesType">销售类型</string>
     <string name="msg_item_over_10">10件以上</string>
+    <string name="ItemDiscount">折扣</string>
+    <string name="pay_msg1">无商品</string>
+    <string name="pay_msg2">支付未完成</string>
 
     
 </resources>

@@ -22,7 +22,7 @@ public class Function{
 	MainActivity parent;
 
 	int[] ids = new int[] { R.id.buttonType1, R.id.buttonType2,
-			R.id.buttonType3, R.id.buttonFunction2 };
+			R.id.buttonType3,R.id.buttonType4, R.id.buttonFunction2 };
 	Type[] types = new Type[] { Type.type1, Type.type2, Type.type3 };
 
 	int currentID = R.id.buttonType1;
@@ -62,7 +62,7 @@ public class Function{
 	private void setFunction() {
 		for (int id : ids) {
 			((Button) parent.findViewById(id))
-					.setBackgroundColor(Color.TRANSPARENT);
+					.setBackgroundColor(Color.DKGRAY);
 		}
 		((Button) parent.findViewById(currentID))
 				.setBackgroundColor(Color.LTGRAY);
