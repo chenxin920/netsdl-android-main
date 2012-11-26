@@ -234,4 +234,13 @@ public class MainActivity extends Activity {
 		Login, Function, PreMain, Main
 	}
 
+	//确保每次切换后都是从登录界面开始
+	@Override
+	protected void onRestart() {
+		onDestroy();
+		onCreate(null);		
+	}
+	
+	
+
 }
