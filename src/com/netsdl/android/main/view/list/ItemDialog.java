@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.netsdl.android.common.Structs.Item;
+import com.netsdl.android.common.Util;
 import com.netsdl.android.main.R;
 import com.netsdl.android.main.view.MainActivity;
 import com.netsdl.android.main.view.list.ItemList.ItemAdapter;
@@ -295,8 +296,8 @@ public class ItemDialog implements Dialogable, Runnable {
 	}
 
 	private void countSum() {
-		itemNew.lumpSum = itemNew.price.multiply(new BigDecimal(
+		itemNew.lumpSum = Util.round(itemNew.price.multiply(new BigDecimal(
 				itemNew.itemDiscount).divide(new BigDecimal(100),2, BigDecimal.ROUND_HALF_UP)).multiply(new BigDecimal(
-						itemNew.count));
+						itemNew.count)),2);
 	}
 }

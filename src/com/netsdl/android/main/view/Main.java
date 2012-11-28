@@ -237,6 +237,7 @@ public class Main {
 					try {
 						closeThis();
 					} catch (IllegalArgumentException e) {
+						e.printStackTrace();
 					} catch (SecurityException e) {
 					} catch (IllegalAccessException e) {
 					} catch (NoSuchFieldException e) {
@@ -359,12 +360,13 @@ public class Main {
 					if (parent.mapItem.size() <= 10) {
 						Item item = new Structs().new Item();
 						item.count = 1;
-
-						item.price = (BigDecimal) DatabaseHelper
-								.getColumnValue(objs,
-										SkuMaster.COLUMN_ITEM_PRICE,
-										SkuMaster.COLUMNS);
-						item.price.multiply(new BigDecimal(item.count));
+						//itemPrice
+						BigDecimal itemPrice = (BigDecimal) DatabaseHelper
+						.getColumnValue(objs,
+								SkuMaster.COLUMN_ITEM_PRICE,
+								SkuMaster.COLUMNS);
+						item.price = itemPrice;
+						item.itemDiscount = 100;
 						item.lumpSum = item.price.multiply(new BigDecimal(
 								item.count));
 						parent.mapItem.put(skuId, item);
@@ -377,10 +379,13 @@ public class Main {
 				} else {
 					Item item = parent.mapItem.get(skuId);
 					item.count += 1;
-
-					item.price = (BigDecimal) DatabaseHelper.getColumnValue(
-							objs, SkuMaster.COLUMN_ITEM_PRICE,
+					//itemPrice
+					BigDecimal itemPrice = (BigDecimal) DatabaseHelper
+					.getColumnValue(objs,
+							SkuMaster.COLUMN_ITEM_PRICE,
 							SkuMaster.COLUMNS);
+					item.price = itemPrice;
+					item.itemDiscount = 100;
 					item.lumpSum = item.price.multiply(new BigDecimal(
 							item.count));
 
@@ -500,7 +505,7 @@ public class Main {
 		now.setTimeInMillis(System.currentTimeMillis());
 		String timestamp = sdf.format(now.getTime());
 		StringBuffer sbItems = new StringBuffer();
-
+		//销售明细
 		for (Entry<Integer, Item> entry : parent.mapItem.entrySet()) {
 			Integer id = entry.getKey();
 			Item item = entry.getValue();
@@ -533,7 +538,7 @@ public class Main {
 		}
 
 		StringBuffer sbPays = new StringBuffer();
-
+		//支付方式
 		for (Entry<Integer, BigDecimal> entry : parent.mapPay.entrySet()) {
 			Integer id = entry.getKey();
 			BigDecimal count = entry.getValue();
@@ -554,6 +559,7 @@ public class Main {
 
 		}
 
+		//找零
 		String strs[] = getInsertPosTableString(strUUID, timestamp,
 				parent.type, parent.deviceItem, false);
 
@@ -639,7 +645,9 @@ public class Main {
 			Type type, DeviceItem deviceItem, Item item, Object[] objs) {
 		String strs[] = getInsertPosTableString(strUUID, timestamp, type,
 				deviceItem, true);
-
+		BigDecimal itemPrice = (BigDecimal) DatabaseHelper
+		.getColumnValue(objs, SkuMaster.COLUMN_ITEM_PRICE,
+				SkuMaster.COLUMNS);
 		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_SKU_CD,
 				PosTable.COLUMNS)] = (String) DatabaseHelper.getColumnValue(
 				objs, SkuMaster.COLUMN_SKU_CD, SkuMaster.COLUMNS);
@@ -654,9 +662,7 @@ public class Main {
 						SkuMaster.COLUMNS)).toString();
 
 		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_S_PRICE,
-				PosTable.COLUMNS)] = ((BigDecimal) DatabaseHelper
-				.getColumnValue(objs, SkuMaster.COLUMN_ITEM_PRICE,
-						SkuMaster.COLUMNS)).toString();
+				PosTable.COLUMNS)] = itemPrice.toString();
 
 		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_P_PRICE,
 				PosTable.COLUMNS)] = item.price.toString();
@@ -675,6 +681,22 @@ public class Main {
 		//日结标记
 		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_END_DAY,
 				PosTable.COLUMNS)] = "0";
+		//扣率
+		BigDecimal offrate = new BigDecimal(100);
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_OFF_RATE,
+				PosTable.COLUMNS)] = offrate.toString();
+		//销售价
+		BigDecimal pPrice = item.price.multiply(new BigDecimal(item.itemDiscount)).divide(new BigDecimal(100),2, BigDecimal.ROUND_HALF_UP);
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_P_PRICE,
+				PosTable.COLUMNS)] = pPrice.toString();
+		//建议销售价
+		BigDecimal pStdPrice = itemPrice.multiply(offrate).divide(new BigDecimal(100),2, BigDecimal.ROUND_HALF_UP);
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_P_STD_PRICE,
+				PosTable.COLUMNS)] =pStdPrice.toString();
+		//折扣
+		BigDecimal pDiscount = pPrice.divide(pStdPrice,2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
+		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_P_DISCOUNT,
+				PosTable.COLUMNS)] = ""+pDiscount.intValue();
 
 		return strs;
 
@@ -729,7 +751,7 @@ public class Main {
 				parent.deviceItem.custom[1], parent.deviceItem.operator[0],
 				parent.deviceItem.operator[1],
 				isItem ? Constant.ORDER_FLAG_SKU : Constant.ORDER_FLAG_PAY, "",
-				"", "", "", "", "", "", "","0" };
+				"", "", "", "", "", "", "","0", "0", "0", "0" };
 		return strs;
 	}
 
