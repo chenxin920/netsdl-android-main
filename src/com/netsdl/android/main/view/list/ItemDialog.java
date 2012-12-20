@@ -298,6 +298,6 @@ public class ItemDialog implements Dialogable, Runnable {
 	private void countSum() {
 		itemNew.lumpSum = Util.round(itemNew.price.multiply(new BigDecimal(
 				itemNew.itemDiscount).divide(new BigDecimal(100),2, BigDecimal.ROUND_HALF_UP)).multiply(new BigDecimal(
-						itemNew.count)),2);
+						itemNew.count)));
 	}
 }

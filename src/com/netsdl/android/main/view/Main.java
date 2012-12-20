@@ -694,7 +694,11 @@ public class Main {
 		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_P_STD_PRICE,
 				PosTable.COLUMNS)] =pStdPrice.toString();
 		//折扣
-		BigDecimal pDiscount = pPrice.divide(pStdPrice,2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
+		BigDecimal pDiscount = null;
+		if(pStdPrice.doubleValue()==0)
+			pDiscount = new BigDecimal(100);
+		else
+			pDiscount = pPrice.divide(pStdPrice,2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
 		strs[DatabaseHelper.getColumnIndex(PosTable.COLUMN_P_DISCOUNT,
 				PosTable.COLUMNS)] = ""+pDiscount.intValue();
 
