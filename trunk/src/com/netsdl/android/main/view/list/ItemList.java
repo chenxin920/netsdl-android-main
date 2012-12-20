@@ -105,11 +105,11 @@ public class ItemList {
 				holder.buttonDelete = (Button) convertView
 						.findViewById(R.id.buttonDelete);
 				//销售商品字体颜色设置
-				holder.prop1.setTextColor(Color.BLUE);
-				holder.prop2.setTextColor(Color.BLUE);
-				holder.price.setTextColor(Color.BLUE);
-				holder.count.setTextColor(Color.BLUE);
-				holder.lumpSum.setTextColor(Color.BLUE);
+				holder.prop1.setTextColor(Color.WHITE);
+				holder.prop2.setTextColor(Color.WHITE);
+				holder.price.setTextColor(Color.WHITE);
+				holder.count.setTextColor(Color.WHITE);
+				holder.lumpSum.setTextColor(Color.WHITE);
 				convertView.setTag(holder);
 
 			} else {
